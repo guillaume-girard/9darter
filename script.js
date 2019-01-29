@@ -1,5 +1,11 @@
 "use strict";
 
+const GAME_301 = "301";
+const GAME_CRICKET = "Cricket";
+const GAME_REVERSE_CRICKET = "Reverse Cricket";
+const GAME_CRAZY_CRICKET = "Crazy Cricket";
+const GAME_REVERSE_CRAZY_CRICKET = "Reverse Crazy Cricket";
+
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
         var names = [];
@@ -186,7 +192,7 @@ document.addEventListener("readystatechange", function() {
                 var p = players[i];
                 if (updateAverage)
                     computeAverage(p);
-                scorediv.innerHTML = 
+                scorediv.innerHTML =
                     scorediv.innerHTML +
                     "<div class='score'><h2" + (p === currentPlayer ? " class='current'": "") + ">" + p.name + "</h2>" +
                     "<span>" + (p.rank !== null ? computeRank(p.rank) : p.score) + "</span>" +

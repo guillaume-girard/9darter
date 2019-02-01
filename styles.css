@@ -96,6 +96,33 @@
 #scoreprint table td {
     text-align: center;
     padding: 0 20px;
+    position: relative;
+}
+#scoreprint table td .bar {
+    border: 2px solid red;
+    display: inline-block;
+    height: 1.3em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0px;
+}
+#scoreprint table td .bar.bar-one {
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg);
+}
+#scoreprint table td .bar.bar-two {
+    transform:
+        translate(-50%, -50%)
+        rotate(135deg);
+}
+#scoreprint table td .bar.bar-open {
+    width: 1em;
+    height: 1em;
+    border-radius: .5em;
+    border-width: 4px;
+    transform: translate(-50%, -50%);
 }
 #scoreprint tfoot {
     background-color: gray;

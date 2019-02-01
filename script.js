@@ -18,6 +18,7 @@ document.addEventListener("readystatechange", function() {
         var lastDart = null;
         var cricketTargets = [];
         var cricketTargetsClosed = [];
+        var reverseCricket = false;
 
         function initGame() {
             players = [];
@@ -41,20 +42,22 @@ document.addEventListener("readystatechange", function() {
             printScore();
         }
 
-        function initGameCricket() {
+        function initGameCricket(reverse, crazy) {
             players = [];
             currentIndex = 0;
-            cricketTargets = getCricketTargets(true);
+            currentRank = 1;
+            cricketTargets = getCricketTargets(crazy);
             cricketTargetsClosed = [];
-            console.log(cricketTargets);
+            reverseCricket = reverse;
 
             nbPlayers = names.length;
             for (var i = 0; i < nbPlayers; i++) {
                 players[i] = {
                     name: names[i],
                     score: 0,
+                    targetsState: getInitialTargetsState(cricketTargets),
                     finished: false,
-                    targetsState: getInitialTargetsState(cricketTargets)
+                    rank: null
                 };
             }
             currentPlayer = players[0];
@@ -132,11 +135,12 @@ document.addEventListener("readystatechange", function() {
                 currentIndex = 0;
             }
             if (players[currentIndex].finished) {
-                nextPlayer();
+                nextPlayerCricket();
             } else {
                 currentPlayer = players[currentIndex];
                 if (currentRank === names.length) {
                     currentPlayer.rank = currentRank;
+                    currentPlayer.finished = true;
                     currentPlayer = null;
                 }
 
@@ -209,7 +213,40 @@ document.addEventListener("readystatechange", function() {
 
                 if (currentPlayer.finished) {
                     currentPlayer.rank = currentRank++;
-                    nextPlayer();
+                }
+                // verify if any player has finished
+                var recommence = false;
+                do {
+                    recommence = false;
+                    for (var i = 0 ; i < players.length ; i++) {
+                        var pl = players[i];
+                        var allOpened = pl.targetsState.every(function (el) {
+                            return el.state === "Open";
+                        });
+                        if (allOpened && !pl.finished) {
+                            pl.finished = players.every(function (el) {
+                                var returnValue = null;
+                                if (!reverseCricket) {
+                                    returnValue = (el === pl || el.finished || el.score <= pl.score);
+                                } else {
+                                    returnValue = (el === pl || el.finished || el.score >= pl.score);
+                                }
+                                return returnValue;
+                            });
+                            if (pl.finished) {
+                                pl.rank = currentRank++;
+                                recommence = true;
+                            }
+                        }
+                    }
+                } while (recommence)
+                if (currentPlayer.finished) {
+                    if (!players.every(function(el) { return el.finished; })) {
+                        nextPlayerCricket();
+                    } else {
+                        currentPlayer = null;
+                        console.log("game finished");
+                    }
                 }
             } else {
                 console.log("invalid score");
@@ -219,14 +256,11 @@ document.addEventListener("readystatechange", function() {
         }
 
         function scoreCricket(multiple, value) {
-            console.log(currentPlayer, value, multiple);
             var i = 0;
             do {
-                console.log(i, cricketTargetsClosed);
                 var currentTargetStateObj = currentPlayer.targetsState.find(function(el) {
                     return el.target === value;
                 });
-                console.log(currentTargetStateObj);
                 switch (currentTargetStateObj.state) {
                     case 0:
                     case 1:
@@ -235,6 +269,7 @@ document.addEventListener("readystatechange", function() {
                     case 2:
                         currentTargetStateObj.state = "Open";
                         break;
+                    case "Open":
                     default:
                         if (cricketTargetsClosed.indexOf(value) < 0) {
                             var needToClose = true;
@@ -251,13 +286,42 @@ document.addEventListener("readystatechange", function() {
                             if (needToClose) {
                                 cricketTargetsClosed.push(value);
                             } else {
-                                currentPlayer.score += value === "Bull's eye" ? 25 : value;;
+                                if (!reverseCricket) {
+                                    currentPlayer.score += (value === "Bull's eye" ? 25 : value);
+                                } else {
+                                    for (var k = 0; k < players.length; k++) {
+                                        var plouc = players[k];
+                                        if (plouc !== currentPlayer) {
+                                            var chips = plouc.targetsState.find(function (el) {
+                                                return el.target === value;
+                                            });
+                                            if (chips.state !== "Open") {
+                                                plouc.score += (value === "Bull's eye" ? 25 : value);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                 }
                 i++;
             } while (i < multiple);
-            printScoreCricket();
+            // Does player has finished ?
+            var allOpened = currentPlayer.targetsState.every(function(el) {
+                return el.state === "Open";
+            });
+            if (allOpened) {
+                var playerScore = currentPlayer.score;
+                currentPlayer.finished = players.every(function(el) {
+                    var returnValue = null;
+                    if (!reverseCricket) {
+                        returnValue = (el === currentPlayer || el.finished || el.score <= playerScore);
+                    } else {
+                        returnValue = (el === currentPlayer || el.finished || el.score >= playerScore);
+                    }
+                    return returnValue;
+                });
+            }
         }
 
         function cancelLastDart() {
@@ -345,8 +409,29 @@ document.addEventListener("readystatechange", function() {
                     var state = p.targetsState.filter(function(el) {
                         return el.target === t;
                     });
+                    var strHtmlState = "";
+                    switch (state[0].state) {
+                        case 1:
+                            strHtmlState +=
+                                    "<span class='bar bar-one'></span>";
+                            break;
+                        case 2:
+                            strHtmlState +=
+                                    "<span class='bar bar-one'></span>" +
+                                    "<span class='bar bar-two'></span>";
+                            break;
+                        case "Open":
+                            strHtmlState +=
+                                    "<span class='bar bar-one'></span>" +
+                                    "<span class='bar bar-two'></span>" +
+                                    "<span class='bar bar-open'></span>";
+                            break;
+                        case 0:
+                        default:
+                            break;
+                    }
                     strHtml +=
-                            "<td>" + state[0].state + "</td>";
+                            "<td>" + strHtmlState + "</td>";
                 }
                 "</tr>";
             }
@@ -355,7 +440,9 @@ document.addEventListener("readystatechange", function() {
             strHtml += "</tbody><tfoot><tr><th>Score</th>";
             for (var i = 0; i < players.length; i++) {
                 var p = players[i];
-                strHtml += "<td>" + p.score + "</td>";
+                strHtml += "<td>" + p.score +
+                        (p.finished ? "<br />" + computeRank(p.rank) : "") +
+                        "</td>";
             }
             strHtml += "</tr></tfoot></table>";
 
@@ -375,6 +462,8 @@ document.addEventListener("readystatechange", function() {
         var inputscorecricket = document.getElementById("inputscorecricket");
         var buttonstartgame = document.getElementById("startgameButton");
         var buttonstartgamecricket = document.getElementById("startcricketButton");
+        var checkboxreverse = document.getElementById("checkboxreverse");
+        var checkboxcrazy = document.getElementById("checkboxcrazy");
         var buttonnextplayer = document.getElementById("buttonnextplayer");
         var buttonnextplayercricket = document.getElementById("buttonnextplayercricket");
         var scorediv = document.getElementById("scoreprint");
@@ -392,7 +481,10 @@ document.addEventListener("readystatechange", function() {
         }, false);
         // Button start game Cricket
         buttonstartgamecricket.addEventListener("click", function() {
-            initGameCricket();
+            var reverse = checkboxreverse.checked;
+            var crazy = checkboxcrazy.checked;
+
+            initGameCricket(reverse, crazy);
         }, false);
 
         // Button next player

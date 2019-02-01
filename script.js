@@ -19,8 +19,10 @@ document.addEventListener("readystatechange", function() {
         var cricketTargets = [];
         var cricketTargetsClosed = [];
         var reverseCricket = false;
+        var isDoubleOut = false;
 
-        function initGame() {
+        function initGame(doubleOut) {
+            isDoubleOut = doubleOut;
             players = [];
             currentRank = 1;
             currentIndex = 0;
@@ -167,13 +169,12 @@ document.addEventListener("readystatechange", function() {
                 currentPlayer.totalpoints += value;
                 currentPlayer.score -= value;
 
-                if (currentPlayer.score < 0) {
-                    currentPlayer.score = scoreAtFirst;
-                    nextPlayer();
-                }
                 if (currentPlayer.score === 0) {
-                    currentPlayer.rank = currentRank;
-                    currentRank++;
+                    currentPlayer.rank = currentRank++;
+                    nextPlayer();
+                } else if (currentPlayer.score < 0 ||
+                        (currentPlayer.score < 2 && isDoubleOut)) {
+                    currentPlayer.score = scoreAtFirst;
                     nextPlayer();
                 }
             } else if (/[t,d][0-9]+/i.test(value)) {
@@ -187,12 +188,12 @@ document.addEventListener("readystatechange", function() {
                 currentPlayer.totalpoints += value;
                 currentPlayer.score -= value;
 
-                if (currentPlayer.score < 0) {
-                    currentPlayer.score = scoreAtFirst;
-                    nextPlayer();
-                }
                 if (currentPlayer.score === 0) {
                     currentPlayer.rank = currentRank++;
+                    nextPlayer();
+                } else if (currentPlayer.score < 0 ||
+                        (currentPlayer.score < 2 && isDoubleOut)) {
+                    currentPlayer.score = scoreAtFirst;
                     nextPlayer();
                 }
             } else {
@@ -461,6 +462,7 @@ document.addEventListener("readystatechange", function() {
         var inputscore = document.getElementById("inputscore");
         var inputscorecricket = document.getElementById("inputscorecricket");
         var buttonstartgame = document.getElementById("startgameButton");
+        var checkboxdoubleout = document.getElementById("checkboxdoubleout");
         var buttonstartgamecricket = document.getElementById("startcricketButton");
         var checkboxreverse = document.getElementById("checkboxreverse");
         var checkboxcrazy = document.getElementById("checkboxcrazy");
@@ -477,7 +479,9 @@ document.addEventListener("readystatechange", function() {
 
         // Button start game 301
         buttonstartgame.addEventListener("click", function() {
-            initGame();
+            var doubleOut = checkboxdoubleout.checked;
+            console.log(doubleOut);
+            initGame(doubleOut);
         }, false);
         // Button start game Cricket
         buttonstartgamecricket.addEventListener("click", function() {

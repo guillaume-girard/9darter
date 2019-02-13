@@ -6,32 +6,72 @@
         <link rel="stylesheet" href="./styles.css" />
         <script type="text/javascript" src="./script.js"></script>
     </head>
+    
     <body>
-        <form id="addplayer">
-            <label>Ajouter un joueur :</label>
-            <input id="inputplayername" type="text" name="playername" />
-            <input type="submit" value="Ajouter" />
-        </form>
-        <button id="startgameButton">Commencer le 301</button>
-        Double-out : <input type="checkbox" id="checkboxdoubleout" value="true"/>
-        <br />
-        <button id="startcricketButton">Commencer le Cricket</button>
-        Reverse : <input type="checkbox" id="checkboxreverse" value="true"/>
-        Crazy : <input type="checkbox" id="checkboxcrazy" value="true"/>
-        <br />
-        <button id="buttonnextplayer">Joueur suivant</button>
-        <button id="buttonnextplayercricket">Joueur suivant Cricket</button>
+		
+	<div id="titlecontainer">
+		<h1>THE ULTIMATE SKILL CONTEST : EXTREME DARTS</h1>
+	</div>	
+        
+    <!-- game mode select and score input -->
+	<main>
+		
+		<section id="playercontrol">
+			<img src="img/players.jpg" alt="awesome players">
+			<form id="addplayer">
+				<input id="inputplayername" type="text" name="playername" placeholder="Nom du joueur"/>
+				<input type="submit" value="Ajouter" />
+			</form>
+		</section>
+		
+        <section id="troiscentun">
+			<div class="control">
+				<input type="checkbox" id="checkboxdoubleout" value="true"/>
+				<label>Double-out</label> 
+				<button id="startgameButton">Commencer le 301</button>		
+				<img class="gameimg" src="img/301.png" alt="301 logo">	
+			</div>
+        </section>
+        
+        <section id="cricket">				
+			<div class="control">	
+						
+				<label>Reverse :</label> 
+				<input type="checkbox" id="checkboxreverse" value="true"/>
+				<label>Crazy :</label> 
+				<input type="checkbox" id="checkboxcrazy" value="true"/>	
+				<button id="startcricketButton">Commencer le Cricket</button>
+				<img class="gameimg" src="img/cricket.png" alt="cricket logo">		
+			</div>
+        </section>
+        
+	</main>
+        
+       
 
-        <form id="scoreform">
-            <input id="inputscore" type="text" name="score" />
-            <input type="submit" value="Valider" />
-        </form>
-        <form id="scoreformcricket">
-            <input id="inputscorecricket" type="text" name="score" />
-            <input type="submit" value="Valider (cricket)" />
-        </form>
-
-        <div id="scoreprint"></div>
+	<!-- zone for stupid javascript users -->
+	<div id="scoreprint"></div>
+        
+	<!-- score control -->
+	<div id="scorecontrol">
+		<div id="controltrois">
+			<form id="scoreform">
+				<input id="inputscore" type="text" name="score" />
+				<input id="validtrois" type="submit" value="" />
+			</form>
+			
+			<button id="buttonnextplayer"></button>
+		</div>
+		
+		<div id="controlcricket">
+			<form id="scoreformcricket">
+				<input id="inputscorecricket" type="text" name="score" />
+				<input id="validcricket" type="submit" value="" />
+			</form>
+			
+			<button id="buttonnextplayercricket"></button>
+		</div>
+	</div>
 
     </body>
 </html>

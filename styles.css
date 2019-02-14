@@ -140,6 +140,7 @@
     background-color: gray;
     color: whitesmoke;
 }
+
 /* ---fut---fut---fut---fut---fut---fut---
    bullshit above, the fun starts here !!
    ---fut---fut---fut---fut---fut---fut--- */
@@ -340,4 +341,24 @@ main,
     font-size: 100%;
     background-color: #a1ffac;
     text-align: center;
+}
+
+@keyframes vangerwen {
+	from {
+		width: 0%;
+		height: 0%;
+	}
+	to {
+		width: 300%;
+		height: 300%;
+	}
+}
+.grosvangerwen {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 0px;
+	height: 0px;
+	animation: vangerwen 1s ease-out;
 }

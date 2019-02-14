@@ -270,7 +270,17 @@ document.addEventListener("readystatechange", function() {
                 var firstChar = (value.slice(0, 1)).toLowerCase();
                 var multiplyBy = firstChar === "d" ? 2 : 3;
                 value = parseInt(value.slice(1));
-                value *= multiplyBy;
+                
+				// van gerwen
+				if (value === 20 && multiplyBy === 3) {
+					// van gerwen grosse gueule
+					var imgvangerwen = document.createElement('img');
+					imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+					imgvangerwen.className = "grosvangerwen";
+					document.body.appendChild(imgvangerwen);
+				}
+
+				value *= multiplyBy;
 
                 lastDart = value;
                 currentPlayer.nbDarts++;
@@ -298,6 +308,15 @@ document.addEventListener("readystatechange", function() {
                 var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
                 value = multiplyBy > 1 ? value.slice(1) : value;
                 value = value === "b" ? "Bull's eye" : parseInt(value);
+				
+				// van gerwen
+				if (value === 20 && multiplyBy === 3) {
+					// van gerwen grosse gueule
+					var imgvangerwen = document.createElement('img');
+					imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+					imgvangerwen.className = "grosvangerwen";
+					document.body.appendChild(imgvangerwen);
+				}
 
                 if (cricketTargets.indexOf(value) >= 0) {
                     scoreCricket(multiplyBy, value);

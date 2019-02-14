@@ -6,9 +6,9 @@
     padding: 10px;
     font-size: 30px;
     height:400px;
-	/*background-image:url("img/test.png");
-	background-size:cover; */
-	background-image: linear-gradient(#e0e0de, white);
+    /*background-image:url("img/test.png");
+    background-size:cover; */
+    background-image: linear-gradient(#e0e0de, white);
 }
 #scoreprint h2 {
     margin: 0;
@@ -133,21 +133,21 @@
 /* ---fut---fut---fut---fut---fut---fut---
    bullshit above, the fun starts here !!
    ---fut---fut---fut---fut---fut---fut--- */
-body{
-    margin:0;
+body {
+    margin: 0;
 }
 
-#titlecontainer{
-    display : flex;
+#titlecontainer {
+    display: flex;
     justify-content: space-around;
     align-items: center;
-    color:red;
-    background-color:lightgrey;
-    text-align:center;
-    margin:auto;
-    background-image:url("img/banner.jpg");
-    height:100px;
-    background-size:cover;
+    color: red;
+    background-color: lightgrey;
+    text-align: center;
+    margin: auto;
+    background-image: url("img/banner.jpg");
+    height: 100px;
+    background-size: cover;
     text-shadow: 3px 2px black;
     font-size: 2em;
 }
@@ -160,31 +160,31 @@ main {
 main,
 #troiscentun,
 #cricket {
-    display:flex;
-    flex:2;
+    display: flex;
+    flex: 2;
 }
 
 /* player add */
 
-#playercontrol{
-    flex:1;
-    position:relative;
+#playercontrol {
+    flex: 1;
+    position: relative;
     overflow: hidden;
 }
 
-#playercontrol img{
+#playercontrol img {
     position: absolute;
-    width:160%;
-    z-index:-1;
+    width: 160%;
+    z-index: -1;
     transition: 0.5s;
 }
 
 #playercontrol:hover img {
-    transform:scale(1.05);
-    filter:blur(2px);
+    transform: scale(1.05);
+    filter: blur(2px);
 }
 
-#addplayer{
+#addplayer {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -194,34 +194,34 @@ main,
 /* general control */
 
 .control {
-    display : flex;
+    display: flex;
     justify-content: space-around;
     align-items: center;
     height: 100%;
-    flex:1;
+    flex: 1;
 }
 
 .control img {
-    width:150px;
+    width: 150px;
 }
 
 /* 301 parameter */
 
-#troiscentun{
-    background-color:lightblue;
+#troiscentun {
+    background-color: lightblue;
 }
 
 #troiscentun label {
-    transition:0.5s;
+    transition: 0.5s;
 }
 
 #checkboxdoubleout:checked ~ label {
     transform: scale(1.3);
-    color:#b71a30;
+    color: #b71a30;
 }
 
 #startgameButton{
-    font-size:1.5em;
+    font-size: 1.5em;
     background-color: #b71a30;
     color: black;
     border: 2px solid #b71a30;
@@ -231,23 +231,23 @@ main,
 /* cricket parameter */
 
 #cricket {
-    display : flex;
+    display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color:#a1ffac;
+    background-color: #a1ffac;
 }
 
 #cricket img {
-	transition:0.5s;
+    transition:0.5s;
 }
 
 #checkboxreverse:checked ~ img {
-    transform:scaleX(-1);
-    transform:scaleY(-1);
+    transform: scaleX(-1);
+    transform: scaleY(-1);
 }
 
-#startcricketButton{
-    font-size:1.5em;
+#startcricketButton {
+    font-size: 1.5em;
     background-color: #2e5131;
     color: white;
     border: 2px solid #2e5131;
@@ -278,52 +278,56 @@ main,
 
 /* footer : score input */
 
-#scorecontrol{
+#scorecontrol {
     display: flex;
     justify-content: space-around;
 }
 
-#controlcricket, #controltrois{
-    display:flex;
+#controlcricket,
+#controltrois {
+    display: flex;
 }
 
-#scoreform, #scoreformcricket {
+#scoreform,
+#scoreformcricket {
     display:flex;
     flex-direction: column;
     justify-content:space-around;
     padding-right:40px;
 }
 
-#controletrois{
+#controletrois {
 
 }
 
-#inputscore{
+#inputscore {
     border: 2px solid grey;
     border-radius: 4px;
     height: 50px;
-    font-size:100%;
-    background-color:#add8e6;
-    text-align:center;
+    font-size: 100%;
+    background-color: #add8e6;
+    text-align: center;
 }
 
-#validtrois, #validcricket{
-    background-image:url('img/score.png');
-    background-size:cover;
-    height:150px;
+#validtrois,
+#validcricket {
+    background-image: url('img/score.png');
+    background-size: cover;
+    height: 150px;
 }
 
-#buttonnextplayer, #buttonnextplayercricket{
-    background-image:url('img/next.png');
-    background-size:cover;
-    width:200px;
+#buttonnextplayer,
+#buttonnextplayercricket{
+    background-image: url('img/next.png');
+    background-size: cover;
+    width: 200px;
 }
 
-#inputscorecricket{
+#inputscorecricket {
     border: 2px solid grey;
     border-radius: 4px;
     height: 50px;
-    font-size:100%;
-    background-color:#a1ffac;
-    text-align:center;
+    font-size: 100%;
+    background-color: #a1ffac;
+    text-align: center;
 }

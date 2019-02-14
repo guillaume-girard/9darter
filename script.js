@@ -9,11 +9,11 @@ const GAME_REVERSE_CRAZY_CRICKET = "Reverse Crazy Cricket";
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
         // --- TMP CODE ---
-        document.getElementById("tmp_form").addEventListener("submit", function(evt) {
+        /*document.getElementById("tmp_form").addEventListener("submit", function(evt) {
             evt.preventDefault();
             var val = document.getElementById("tmp_input").value;
             document.getElementById("tmp_input").value = "";
-            var letruc = findSuggestedFinish(val);
+            var letruc = findSuggestedFinish(val, 3);
             var str = "";
             if (!letruc) {
                 str += "Pas trouvé";
@@ -23,7 +23,7 @@ document.addEventListener("readystatechange", function() {
                 }
             }
             console.log("Finish:", str, letruc);
-        });
+        });*/
         // END TMP CODE
 
 
@@ -49,6 +49,7 @@ document.addEventListener("readystatechange", function() {
             for (var i = 0; i < nbPlayers; i++) {
                 players[i] = {
                     name: names[i],
+                    suggestion: false,
                     score: 301,
                     nblegs: 0,
                     nbDarts: 0,
@@ -68,7 +69,6 @@ document.addEventListener("readystatechange", function() {
             if (score > 180) {
                 return false;
             }
-            isDoubleOut = true;
 
             var possibleDarts = [];
             for (var j = 3; j > 0; j--) {
@@ -90,6 +90,44 @@ document.addEventListener("readystatechange", function() {
                 notation: "Double Bull"
             });
 
+            var found = possibleDarts.find(function(el) {
+                return el.score === score &&
+                        (!isDoubleOut || el.isDouble);
+            });
+            if (found) {
+                return [found];
+            } else if (nbDartsLeft > 1) {
+                for (var i = 0; i < possibleDarts.length; i++) {
+                    var currentPossibleDart = possibleDarts[i];
+                    var intermediateTabResult = [currentPossibleDart];
+                    var intermediateScore = score - currentPossibleDart.score;
+
+                    var foundSecond = possibleDarts.find(function(el) {
+                        return el.score === intermediateScore &&
+                                (!isDoubleOut || el.isDouble);
+                    });
+                    if (foundSecond) {
+                        intermediateTabResult.push(foundSecond);
+                        return intermediateTabResult;
+                    } else if (nbDartsLeft > 2) {
+                        for (var j = 0; j < possibleDarts.length; j++) {
+                            // Dart two
+                            var currentPossibleDartDeux = possibleDarts[j];
+                            var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
+                            var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
+
+                            var foundThird = possibleDarts.find(function (el) {
+                                return el.score === intermediateScoreDeux &&
+                                        (!isDoubleOut || el.isDouble);
+                            });
+                            if (foundThird) {
+                                intermediateTabResultDeux.push(foundThird);
+                                return intermediateTabResultDeux;
+                            }
+                        }
+                    }
+                }
+            }
             return false;
         }
 
@@ -168,6 +206,7 @@ document.addEventListener("readystatechange", function() {
                 nextPlayer();
             } else {
                 currentPlayer.nblegs++;
+                currentPlayer.suggestion = findSuggestedFinish(currentPlayer.score, 3);
                 currentPlayer = players[currentIndex];
                 if (currentRank === names.length) {
                     currentPlayer.rank = currentRank;
@@ -217,6 +256,7 @@ document.addEventListener("readystatechange", function() {
                 currentPlayer.nbDarts++;
                 currentPlayer.totalpoints += value;
                 currentPlayer.score -= value;
+                currentPlayer.suggestion = findSuggestedFinish(currentPlayer.score, 3);
 
                 if (currentPlayer.score === 0) {
                     currentPlayer.rank = currentRank++;
@@ -236,6 +276,7 @@ document.addEventListener("readystatechange", function() {
                 currentPlayer.nbDarts++;
                 currentPlayer.totalpoints += value;
                 currentPlayer.score -= value;
+                currentPlayer.suggestion = findSuggestedFinish(currentPlayer.score, 3);
 
                 if (currentPlayer.score === 0) {
                     currentPlayer.rank = currentRank++;
@@ -250,6 +291,7 @@ document.addEventListener("readystatechange", function() {
             }
             printScore();
         }
+
         function addDartCricket(value) {
            if (/^[t,d]?[0-9b]+/i.test(value)) {
                 var firstChar = (value.slice(0, 1)).toLowerCase();
@@ -382,6 +424,17 @@ document.addEventListener("readystatechange", function() {
             printScore();
         }
 
+        function computeSuggestion(suggestion) {
+            var str = "";
+            for (var i = 0; i < suggestion.length; i++) {
+                str += suggestion[i].notation;
+                if (!(i === suggestion.length - 1)) {
+                    str += " ";
+                }
+            }
+            return str;
+        }
+
         function computeRank(rank) {
             var suffix;
 
@@ -427,6 +480,7 @@ document.addEventListener("readystatechange", function() {
                     computeAverage(p);
                 scorediv.innerHTML +=
                     "<div class='score'><h2" + (p === currentPlayer ? " class='current'": "") + ">" + p.name + "</h2>" +
+                    "<span class='suggestion'>" + (p.suggestion ? computeSuggestion(p.suggestion) : "") + "</span>" +
                     "<span>" + (p.rank !== null ? computeRank(p.rank) : p.score) + "</span>" +
                     "<div class='cigare'>" + getCigare(p.nbDarts) + "</div>" +
                     "</div><div class='average'>Average : <span>" + p.average + "</span></div>";
@@ -529,7 +583,6 @@ document.addEventListener("readystatechange", function() {
         // Button start game 301
         buttonstartgame.addEventListener("click", function() {
             var doubleOut = checkboxdoubleout.checked;
-            console.log(doubleOut);
             initGame(doubleOut);
         }, false);
         // Button start game Cricket

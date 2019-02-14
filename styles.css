@@ -42,6 +42,16 @@
 #scoreprint div.score span {
     color: red;
 }
+#scoreprint div.score span.suggestion {
+    color: black;
+    font-size: 0.5em;
+    font-weight: bold;
+    letter-spacing: -1px;
+    text-align: right;
+    padding-right: 10px;
+    background-color: gray;
+    word-spacing: 5px;
+}
 #scoreprint div {
     display: inline-block;
 }
@@ -53,7 +63,7 @@
 }
 #scoreprint div.cigare {
     height: 100%;
-    width: 50%;
+    width: 40%;
 }
 #scoreprint div.cigare div {
     margin-right: 15px;

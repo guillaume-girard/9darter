@@ -8,6 +8,25 @@ const GAME_REVERSE_CRAZY_CRICKET = "Reverse Crazy Cricket";
 
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
+        // --- TMP CODE ---
+        document.getElementById("tmp_form").addEventListener("submit", function(evt) {
+            evt.preventDefault();
+            var val = document.getElementById("tmp_input").value;
+            document.getElementById("tmp_input").value = "";
+            var letruc = findSuggestedFinish(val);
+            var str = "";
+            if (!letruc) {
+                str += "Pas trouvé";
+            } else {
+                for (var lu = 0; lu < letruc.length; lu++) {
+                    str += letruc[lu].notation + " ";
+                }
+            }
+            console.log("Finish:", str, letruc);
+        });
+        // END TMP CODE
+
+
         var names = [];
         var players = [];
         var currentPlayer;
@@ -42,6 +61,36 @@ document.addEventListener("readystatechange", function() {
             currentPlayer = players[0];
 
             printScore();
+        }
+
+        function findSuggestedFinish(score, nbDartsLeft) {
+            score = Number.parseInt(score);
+            if (score > 180) {
+                return false;
+            }
+            isDoubleOut = true;
+
+            var possibleDarts = [];
+            for (var j = 3; j > 0; j--) {
+                for (var i = 20; i > 0; i--) {
+                    possibleDarts.push({
+                        score: i*j,
+                        isDouble: j === 2,
+                        notation: (j === 3 ? "T" : (j === 2 ? "D" : "")) + i
+                    });
+                }
+            }
+            possibleDarts.push({
+                score: 25,
+                isDouble: false,
+                notation: "Bull"
+            }, {
+                score: 50,
+                isDouble: true,
+                notation: "Double Bull"
+            });
+
+            return false;
         }
 
         function initGameCricket(reverse, crazy) {

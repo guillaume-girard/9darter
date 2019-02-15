@@ -99,30 +99,34 @@ document.addEventListener("readystatechange", function() {
             } else if (nbDartsLeft > 1) {
                 for (var i = 0; i < possibleDarts.length; i++) {
                     var currentPossibleDart = possibleDarts[i];
-                    var intermediateTabResult = [currentPossibleDart];
-                    var intermediateScore = score - currentPossibleDart.score;
+                    if (currentPossibleDart.score >= score) {
+                        var intermediateTabResult = [currentPossibleDart];
+                        var intermediateScore = score - currentPossibleDart.score;
 
-                    var foundSecond = possibleDarts.find(function(el) {
-                        return el.score === intermediateScore &&
-                                (!isDoubleOut || el.isDouble);
-                    });
-                    if (foundSecond) {
-                        intermediateTabResult.push(foundSecond);
-                        return intermediateTabResult;
-                    } else if (nbDartsLeft > 2) {
-                        for (var j = 0; j < possibleDarts.length; j++) {
-                            // Dart two
-                            var currentPossibleDartDeux = possibleDarts[j];
-                            var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
-                            var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
+                        var foundSecond = possibleDarts.find(function(el) {
+                            return el.score === intermediateScore &&
+                                    (!isDoubleOut || el.isDouble);
+                        });
+                        if (foundSecond) {
+                            intermediateTabResult.push(foundSecond);
+                            return intermediateTabResult;
+                        } else if (nbDartsLeft > 2) {
+                            for (var j = 0; j < possibleDarts.length; j++) {
+                                var currentPossibleDartDeux = possibleDarts[j];
 
-                            var foundThird = possibleDarts.find(function (el) {
-                                return el.score === intermediateScoreDeux &&
-                                        (!isDoubleOut || el.isDouble);
-                            });
-                            if (foundThird) {
-                                intermediateTabResultDeux.push(foundThird);
-                                return intermediateTabResultDeux;
+                                if (currentPossibleDartDeux.score >= intermediateScore) {
+                                    var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
+                                    var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
+
+                                    var foundThird = possibleDarts.find(function (el) {
+                                        return el.score === intermediateScoreDeux &&
+                                                (!isDoubleOut || el.isDouble);
+                                    });
+                                    if (foundThird) {
+                                        intermediateTabResultDeux.push(foundThird);
+                                        return intermediateTabResultDeux;
+                                    }
+                                }
                             }
                         }
                     }
@@ -238,19 +242,12 @@ document.addEventListener("readystatechange", function() {
             }
         }
 
-        document.addEventListener("keypress", function(evt) {
-            switch (evt.charCode) {
-                case 110:
-                    nextPlayer();
-                    break;
-                case 99:
-                    cancelLastDart();
-                    break;
-            }
-        });
-
         function addDart(value) {
-            if (/^[0-9]+$/.test(value)) {
+            if (value === "c") {
+                cancelLastDart();
+            } else if (value === "n") {
+                nextPlayer();
+            } else if (/^[0-9]+$/.test(value)) {
                 value = parseInt(value);
                 lastDart = value;
                 currentPlayer.nbDarts++;
@@ -270,7 +267,7 @@ document.addEventListener("readystatechange", function() {
                 var firstChar = (value.slice(0, 1)).toLowerCase();
                 var multiplyBy = firstChar === "d" ? 2 : 3;
                 value = parseInt(value.slice(1));
-                
+
 				// van gerwen
 				if (value === 20 && multiplyBy === 3) {
 					// van gerwen grosse gueule
@@ -303,12 +300,16 @@ document.addEventListener("readystatechange", function() {
         }
 
         function addDartCricket(value) {
-           if (/^[t,d]?[0-9b]+/i.test(value)) {
+            if (value === "c") {
+                cancelLastDartCricket();
+            } else if (value === "n") {
+                nextPlayerCricket();
+            } else if (/^[t,d]?[0-9b]+/i.test(value)) {
                 var firstChar = (value.slice(0, 1)).toLowerCase();
                 var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
                 value = multiplyBy > 1 ? value.slice(1) : value;
                 value = value === "b" ? "Bull's eye" : parseInt(value);
-				
+
 				// van gerwen
 				if (value === 20 && multiplyBy === 3) {
 					// van gerwen grosse gueule
@@ -441,6 +442,14 @@ document.addEventListener("readystatechange", function() {
             currentPlayer.score += lastDart;
 
             printScore();
+        }
+
+        function cancelLastDartCricket() {
+            // retrouver le score de tous les joueurs
+
+            // supprimer le dernier résultat ajouter
+
+            printScoreCricket()();
         }
 
         function computeSuggestion(suggestion) {

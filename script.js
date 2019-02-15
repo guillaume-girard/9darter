@@ -99,7 +99,7 @@ document.addEventListener("readystatechange", function() {
             } else if (nbDartsLeft > 1) {
                 for (var i = 0; i < possibleDarts.length; i++) {
                     var currentPossibleDart = possibleDarts[i];
-                    
+
                     if (currentPossibleDart.score >= score) {
                         var intermediateTabResult = [currentPossibleDart];
                         var intermediateScore = score - currentPossibleDart.score;
@@ -450,6 +450,7 @@ document.addEventListener("readystatechange", function() {
 
             // supprimer le dernier résultat ajouter
 
+            // reprint les scores
             printScoreCricket()();
         }
 

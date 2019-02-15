@@ -243,19 +243,12 @@ document.addEventListener("readystatechange", function() {
             }
         }
 
-        document.addEventListener("keypress", function(evt) {
-            switch (evt.charCode) {
-                case 110:
-                    nextPlayer();
-                    break;
-                case 99:
-                    cancelLastDart();
-                    break;
-            }
-        });
-
         function addDart(value) {
-            if (/^[0-9]+$/.test(value)) {
+            if (value === "c") {
+                cancelLastDart();
+            } else if (value === "n") {
+                nextPlayer();
+            } else if (/^[0-9]+$/.test(value)) {
                 value = parseInt(value);
                 lastDart = value;
                 currentPlayer.nbDarts++;
@@ -298,7 +291,11 @@ document.addEventListener("readystatechange", function() {
         }
 
         function addDartCricket(value) {
-           if (/^[t,d]?[0-9b]+/i.test(value)) {
+            if (value === "c") {
+                cancelLastDartCricket();
+            } else if (value === "n") {
+                nextPlayerCricket();
+            } else if (/^[t,d]?[0-9b]+/i.test(value)) {
                 var firstChar = (value.slice(0, 1)).toLowerCase();
                 var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
                 value = multiplyBy > 1 ? value.slice(1) : value;
@@ -427,6 +424,14 @@ document.addEventListener("readystatechange", function() {
             currentPlayer.score += lastDart;
 
             printScore();
+        }
+
+        function cancelLastDartCricket() {
+            // retrouver le score de tous les joueurs
+
+            // supprimer le dernier résultat ajouter
+
+            printScoreCricket()();
         }
 
         function computeSuggestion(suggestion) {

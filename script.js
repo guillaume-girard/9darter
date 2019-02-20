@@ -100,34 +100,30 @@ document.addEventListener("readystatechange", function() {
                 for (var i = 0; i < possibleDarts.length; i++) {
                     var currentPossibleDart = possibleDarts[i];
 
-                    if (currentPossibleDart.score >= score) {
-                        var intermediateTabResult = [currentPossibleDart];
-                        var intermediateScore = score - currentPossibleDart.score;
+                    var intermediateTabResult = [currentPossibleDart];
+                    var intermediateScore = score - currentPossibleDart.score;
 
-                        var foundSecond = possibleDarts.find(function(el) {
-                            return el.score === intermediateScore &&
-                                    (!isDoubleOut || el.isDouble);
-                        });
-                        if (foundSecond) {
-                            intermediateTabResult.push(foundSecond);
-                            return intermediateTabResult;
-                        } else if (nbDartsLeft > 2) {
-                            for (var j = 0; j < possibleDarts.length; j++) {
-                                var currentPossibleDartDeux = possibleDarts[j];
+                    var foundSecond = possibleDarts.find(function(el) {
+                        return el.score === intermediateScore &&
+                                (!isDoubleOut || el.isDouble);
+                    });
+                    if (foundSecond) {
+                        intermediateTabResult.push(foundSecond);
+                        return intermediateTabResult;
+                    } else if (nbDartsLeft > 2) {
+                        for (var j = 0; j < possibleDarts.length; j++) {
+                            var currentPossibleDartDeux = possibleDarts[j];
 
-                                if (currentPossibleDartDeux.score >= intermediateScore) {
-                                    var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
-                                    var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
+                            var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
+                            var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
 
-                                    var foundThird = possibleDarts.find(function (el) {
-                                        return el.score === intermediateScoreDeux &&
-                                                (!isDoubleOut || el.isDouble);
-                                    });
-                                    if (foundThird) {
-                                        intermediateTabResultDeux.push(foundThird);
-                                        return intermediateTabResultDeux;
-                                    }
-                                }
+                            var foundThird = possibleDarts.find(function (el) {
+                                return el.score === intermediateScoreDeux &&
+                                        (!isDoubleOut || el.isDouble);
+                            });
+                            if (foundThird) {
+                                intermediateTabResultDeux.push(foundThird);
+                                return intermediateTabResultDeux;
                             }
                         }
                     }

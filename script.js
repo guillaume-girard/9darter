@@ -61,10 +61,14 @@ document.addEventListener("readystatechange", function() {
             scoreAtFirst = 301;
             currentPlayer = players[0];
 
+            controlcricket.style.display = null;
+            controltrois.style.display = 'flex';
+
             printScore();
         }
 
         function findSuggestedFinish(score, nbDartsLeft) {
+            nbDartsLeft = nbDartsLeft || 3;
             score = Number.parseInt(score);
             if (score > 180) {
                 return false;
@@ -100,7 +104,7 @@ document.addEventListener("readystatechange", function() {
                 for (var i = 0; i < possibleDarts.length; i++) {
                     var currentPossibleDart = possibleDarts[i];
 
-                    if (currentPossibleDart.score >= score) {
+                    //if (currentPossibleDart.score >= score) {
                         var intermediateTabResult = [currentPossibleDart];
                         var intermediateScore = score - currentPossibleDart.score;
 
@@ -115,7 +119,7 @@ document.addEventListener("readystatechange", function() {
                             for (var j = 0; j < possibleDarts.length; j++) {
                                 var currentPossibleDartDeux = possibleDarts[j];
 
-                                if (currentPossibleDartDeux.score >= intermediateScore) {
+                                //if (currentPossibleDartDeux.score >= intermediateScore) {
                                     var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
                                     var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
 
@@ -127,10 +131,10 @@ document.addEventListener("readystatechange", function() {
                                         intermediateTabResultDeux.push(foundThird);
                                         return intermediateTabResultDeux;
                                     }
-                                }
+                                //}
                             }
                         }
-                    }
+                    //}
                 }
             }
             return false;
@@ -155,6 +159,9 @@ document.addEventListener("readystatechange", function() {
                 };
             }
             currentPlayer = players[0];
+
+            controlcricket.style.display = 'flex';
+            controltrois.style.display = null;
 
             printScoreCricket();
         }
@@ -222,6 +229,8 @@ document.addEventListener("readystatechange", function() {
 
                 printScore(true);
             }
+
+            inputscore.focus();
         }
 
         function nextPlayerCricket() {
@@ -241,6 +250,8 @@ document.addEventListener("readystatechange", function() {
 
                 printScoreCricket();
             }
+
+            inputscorecricket.focus();
         }
 
         function addDart(value) {
@@ -269,16 +280,16 @@ document.addEventListener("readystatechange", function() {
                 var multiplyBy = firstChar === "d" ? 2 : 3;
                 value = parseInt(value.slice(1));
 
-				// van gerwen
-				if (value === 20 && multiplyBy === 3) {
-					// van gerwen grosse gueule
-					var imgvangerwen = document.createElement('img');
-					imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
-					imgvangerwen.className = "grosvangerwen";
-					document.body.appendChild(imgvangerwen);
-				}
+                // van gerwen
+                if (value === 20 && multiplyBy === 3) {
+                    // van gerwen grosse gueule
+                    var imgvangerwen = document.createElement('img');
+                    imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+                    imgvangerwen.className = "grosvangerwen";
+                    document.body.appendChild(imgvangerwen);
+                }
 
-				value *= multiplyBy;
+                value *= multiplyBy;
 
                 lastDart = value;
                 currentPlayer.nbDarts++;
@@ -297,6 +308,9 @@ document.addEventListener("readystatechange", function() {
             } else {
                 console.log("autre");
             }
+
+            inputscore.focus();
+
             printScore();
         }
 
@@ -311,14 +325,14 @@ document.addEventListener("readystatechange", function() {
                 value = multiplyBy > 1 ? value.slice(1) : value;
                 value = value === "b" ? "Bull's eye" : parseInt(value);
 
-				// van gerwen
-				if (value === 20 && multiplyBy === 3) {
-					// van gerwen grosse gueule
-					var imgvangerwen = document.createElement('img');
-					imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
-					imgvangerwen.className = "grosvangerwen";
-					document.body.appendChild(imgvangerwen);
-				}
+                // van gerwen
+                if (value === 20 && multiplyBy === 3) {
+                    // van gerwen grosse gueule
+                    var imgvangerwen = document.createElement('img');
+                    imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+                    imgvangerwen.className = "grosvangerwen";
+                    document.body.appendChild(imgvangerwen);
+                }
 
                 if (cricketTargets.indexOf(value) >= 0) {
                     scoreCricket(multiplyBy, value);
@@ -364,6 +378,8 @@ document.addEventListener("readystatechange", function() {
             } else {
                 console.log("invalid score");
             }
+
+            inputscorecricket.focus();
 
             printScoreCricket();
         }
@@ -590,6 +606,8 @@ document.addEventListener("readystatechange", function() {
         // DOM instances
         var addplayerform = document.getElementById("addplayer");
         var scoreform = document.getElementById("scoreform");
+        var controltrois = document.getElementById("controltrois");
+        var controlcricket = document.getElementById("controlcricket");
         var scoreformcricket = document.getElementById("scoreformcricket");
         var inputplayername = document.getElementById("inputplayername");
         var inputscore = document.getElementById("inputscore");

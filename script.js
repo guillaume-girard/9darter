@@ -49,6 +49,578 @@ class PlayerCollection {
 
 const PLAYERS = new PlayerCollection();
 
+class GameComputer {
+    constructor() {
+        this.players = [];
+        this.currentRank = 1;
+        this.currentPlayer = null;
+        this.currentIndex = 0;
+    }
+
+    get nbPlayers() {
+        return this.players.length;
+    }
+
+    setFirstPlayer() {
+        this.currentPlayer = this.players[0];
+    }
+
+    printScore() {
+        return "";
+    }
+
+    addDart() {
+        return;
+    }
+
+    nextPlayer() {
+        return;
+    }
+
+    cancelLastDart() {
+        return;
+    }
+}
+
+class Game301Computer extends GameComputer {
+    constructor(doubleOut) {
+        super();
+        this.isDoubleOut = doubleOut || false;
+
+        for (var i = 0; i < PLAYERS.size; i++) {
+            this.players[i] = {
+                name: PLAYERS.atIndex(i).name,
+                suggestion: false,
+                score: 301,
+                nblegs: 0,
+                nbDarts: 0,
+                totalpoints: 0,
+                average: 0,
+                rank: null
+            };
+        }
+        this.scoreAtFirst = 301;
+
+        this.setFirstPlayer();
+
+        this.printScore();
+    }
+
+    cancelLastDart() {
+        this.currentPlayer.nbDarts--;
+        this.currentPlayer.totalpoints -= lastDart;
+        this.currentPlayer.score += lastDart;
+
+//        this.printScore();
+    }
+
+    printScore(updateAverage) {
+        let htmlVar = "";
+        for (var i = 0; i < this.nbPlayers; i++) {
+            var p = this.players[i];
+            if (updateAverage)
+                computeAverage(p);
+            htmlVar +=
+                    "<div class='score'><h2" + (p === this.currentPlayer ? " class='current'" : "") + ">" + p.name + "</h2>" +
+                    "<span class='suggestion'>" + (p.suggestion ? computeSuggestion(p.suggestion) : "") + "</span>" +
+                    "<span>" + (p.rank !== null ? computeRank(p.rank) : p.score) + "</span>" +
+                    "<div class='cigare'>" + getCigare(p.nbDarts) + "</div>" +
+                    "</div><div class='average'>Average : <span>" + p.average + "</span></div>";
+        }
+
+        return htmlVar;
+    }
+
+    addDart(value) {
+        if (value === "c") {
+            this.cancelLastDart();
+        } else if (value === "n") {
+            this.nextPlayer();
+        } else if (/^[0-9]+$/.test(value)) {
+            value = parseInt(value);
+            this.lastDart = value;
+            this.currentPlayer.nbDarts++;
+            this.currentPlayer.totalpoints += value;
+            this.currentPlayer.score -= value;
+            this.currentPlayer.suggestion = findSuggestedFinish(this.currentPlayer.score, 3);
+
+            if (this.currentPlayer.score === 0) {
+                this.currentPlayer.rank = this.currentRank++;
+                this.nextPlayer();
+            } else if (this.currentPlayer.score < 0 ||
+                    (this.currentPlayer.score < 2 && this.isDoubleOut)) {
+                this.currentPlayer.score = this.scoreAtFirst;
+                this.nextPlayer();
+            }
+        } else if (/[t,d][0-9]+/i.test(value)) {
+            var firstChar = (value.slice(0, 1)).toLowerCase();
+            var multiplyBy = firstChar === "d" ? 2 : 3;
+            value = parseInt(value.slice(1));
+
+            // van gerwen
+            if (value === 20 && multiplyBy === 3) {
+                // van gerwen grosse gueule
+                var imgvangerwen = document.createElement('img');
+                imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+                imgvangerwen.className = "grosvangerwen";
+                document.body.appendChild(imgvangerwen);
+            }
+
+            value *= multiplyBy;
+
+            this.lastDart = value;
+            this.currentPlayer.nbDarts++;
+            this.currentPlayer.totalpoints += value;
+            this.currentPlayer.score -= value;
+            this.currentPlayer.suggestion = findSuggestedFinish(this.currentPlayer.score, 3);
+
+            if (this.currentPlayer.score === 0) {
+                this.currentPlayer.rank = this.currentRank++;
+                this.nextPlayer();
+            } else if (this.currentPlayer.score < 0 ||
+                    (this.currentPlayer.score < 2 && this.isDoubleOut)) {
+                this.currentPlayer.score = this.scoreAtFirst;
+                this.nextPlayer();
+            }
+        } else {
+            console.log("autre");
+        }
+//        this.printScore();
+    }
+
+    nextPlayer() {
+        this.currentIndex++;
+        if (this.currentIndex >= this.nbPlayers) {
+            this.currentIndex = 0;
+        }
+        if (this.players[this.currentIndex].score === 0) {
+            this.nextPlayer();
+        } else {
+            this.currentPlayer.nblegs++;
+            this.currentPlayer.suggestion = findSuggestedFinish(this.currentPlayer.score, 3);
+            this.currentPlayer = this.players[this.currentIndex];
+            if (this.currentRank === this.nbPlayers) {
+                this.currentPlayer.rank = currentRank;
+                this.currentPlayer = null;
+            } else {
+                this.scoreAtFirst = this.currentPlayer.score;
+            }
+
+//            this.printScore(true);
+        }
+        return;
+    }
+}
+
+class GameCricketComputer extends GameComputer {
+    constructor(reverse, crazy) {
+        super();
+        this.isReverse = reverse;
+        this.targets = getCricketTargets(crazy);
+        this.targetsClosed = [];
+
+        for (var i = 0; i < PLAYERS.size; i++) {
+            this.players[i] = {
+                name: PLAYERS.atIndex(i).name,
+                score: 0,
+                targetsState: getInitialTargetsState(this.targets),
+                finished: false,
+                rank: null
+            };
+        }
+
+        this.setFirstPlayer();
+
+        this.printScore();
+    }
+
+    printScore() {
+        var strHtml = "";
+
+        strHtml = "";
+        strHtml += "<table><thead>";
+
+        // print table head
+        strHtml += "<tr>";
+        strHtml += "<th></th>";
+        for (var i = 0; i < this.nbPlayers; i++) {
+            var p = this.players[i];
+            strHtml += "<th" + (p === this.currentPlayer ? " class='current'" : "") + ">" + p.name + "</th>";
+        }
+        strHtml += "</tr></thead><tbody>";
+
+        // print table body
+        for (var j = 0; j < this.targets.length; j++) {
+            var t = this.targets[j];
+            strHtml +=
+                    "<tr>" +
+                    "<th>" + t + "</th>";
+            for (var i = 0; i < this.nbPlayers; i++) {
+                var p = this.players[i];
+                var state = p.targetsState.filter(function (el) {
+                    return el.target === t;
+                });
+                var strHtmlState = "";
+                switch (state[0].state) {
+                    case 1:
+                        strHtmlState +=
+                                "<span class='bar bar-one'></span>";
+                        break;
+                    case 2:
+                        strHtmlState +=
+                                "<span class='bar bar-one'></span>" +
+                                "<span class='bar bar-two'></span>";
+                        break;
+                    case "Open":
+                        strHtmlState +=
+                                "<span class='bar bar-one'></span>" +
+                                "<span class='bar bar-two'></span>" +
+                                "<span class='bar bar-open'></span>";
+                        break;
+                    case 0:
+                    default:
+                        break;
+                }
+                strHtml +=
+                        "<td>" + strHtmlState + "</td>";
+            }
+            "</tr>";
+        }
+
+        // print table foot (score)
+        strHtml += "</tbody><tfoot><tr><th>Score</th>";
+        for (var i = 0; i < this.nbPlayers; i++) {
+            var p = this.players[i];
+            strHtml += "<td>" + p.score +
+                    (p.finished ? "<br />" + computeRank(p.rank) : "") +
+                    "</td>";
+        }
+        strHtml += "</tr></tfoot></table>";
+
+        return strHtml;
+    }
+
+    addDart(value) {
+        if (value === "c") {
+            this.cancelLastDart();
+        } else if (value === "n") {
+            this.nextPlayer();
+        } else if (/^[t,d]?[0-9b]+/i.test(value)) {
+            var firstChar = (value.slice(0, 1)).toLowerCase();
+            var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
+            value = multiplyBy > 1 ? value.slice(1) : value;
+            value = value === "b" ? "Bull's eye" : parseInt(value);
+
+            // van gerwen
+            if (value === 20 && multiplyBy === 3) {
+                // van gerwen grosse gueule
+                var imgvangerwen = document.createElement('img');
+                imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+                imgvangerwen.className = "grosvangerwen";
+                document.body.appendChild(imgvangerwen);
+            }
+
+            if (this.targets.indexOf(value) >= 0) {
+                this.score(multiplyBy, value);
+            }
+
+            if (this.currentPlayer.finished) {
+                this.currentPlayer.rank = this.currentRank++;
+            }
+            // verify if any player has finished
+            var recommence = false;
+            do {
+                recommence = false;
+                for (var i = 0; i < this.nbPlayers; i++) {
+                    var pl = this.players[i];
+                    var allOpened = pl.targetsState.every(function (el) {
+                        return el.state === "Open";
+                    });
+                    if (allOpened && !pl.finished) {
+                        pl.finished = this.players.every(function (el) {
+                            var returnValue = null;
+                            if (!this.reverseCricket) {
+                                returnValue = (el === pl || el.finished || el.score <= pl.score);
+                            } else {
+                                returnValue = (el === pl || el.finished || el.score >= pl.score);
+                            }
+                            return returnValue;
+                        });
+                        if (pl.finished) {
+                            pl.rank = this.currentRank++;
+                            recommence = true;
+                        }
+                    }
+                }
+            } while (recommence)
+
+            if (this.currentPlayer.finished) {
+                if (!this.players.every(function (el) {
+                    return el.finished;
+                })) {
+                    this.nextPlayer();
+                } else {
+                    this.currentPlayer = null;
+                    console.log("game finished");
+                }
+            }
+        } else {
+            console.log("invalid score");
+        }
+
+        this.printScore();
+    }
+
+    nextPlayer() {
+        this.currentIndex++;
+        if (this.currentIndex >= this.nbPlayers) {
+            this.currentIndex = 0;
+        }
+        if (this.players[this.currentIndex].finished) {
+            this.nextPlayer();
+        } else {
+            this.currentPlayer = this.players[this.currentIndex];
+            if (this.currentRank === this.nbPlayers) {
+                this.currentPlayer.rank = this.currentRank;
+                this.currentPlayer.finished = true;
+                this.currentPlayer = null;
+            }
+
+            this.printScore();
+        }
+        return;
+    }
+
+    score(multiple, value) {
+        var i = 0;
+        do {
+            var currentTargetStateObj = this.currentPlayer.targetsState.find(function (el) {
+                return el.target === value;
+            });
+            switch (currentTargetStateObj.state) {
+                case 0:
+                case 1:
+                    currentTargetStateObj.state++;
+                    break;
+                case 2:
+                    currentTargetStateObj.state = "Open";
+                    break;
+                case "Open":
+                default:
+                    if (this.targetsClosed.indexOf(value) < 0) {
+                        var needToClose = true;
+                        for (var lol = 0; lol < this.nbPlayers; lol++) {
+                            if (this.players[lol] !== this.currentPlayer) {
+                                var statteteet = this.players[lol].targetsState.find(function (el) {
+                                    return el.target === value;
+                                });
+                                if (statteteet.state !== "Open") {
+                                    needToClose = false;
+                                }
+                            }
+                        }
+                        if (needToClose) {
+                            this.targetsClosed.push(value);
+                        } else {
+                            if (!this.reverseCricket) {
+                                this.currentPlayer.score += (value === "Bull's eye" ? 25 : value);
+                            } else {
+                                for (var k = 0; k < this.nbPlayers; k++) {
+                                    var plouc = this.players[k];
+                                    if (plouc !== this.currentPlayer) {
+                                        var chips = plouc.targetsState.find(function (el) {
+                                            return el.target === value;
+                                        });
+                                        if (chips.state !== "Open") {
+                                            plouc.score += (value === "Bull's eye" ? 25 : value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+            }
+            i++;
+        } while (i < multiple);
+
+        // Does player has finished ?
+        var allOpened = this.currentPlayer.targetsState.every(function (el) {
+            return el.state === "Open";
+        });
+        if (allOpened) {
+            var playerScore = this.currentPlayer.score;
+            this.currentPlayer.finished = this.players.every(function (el) {
+                var returnValue = null;
+                if (!this.reverseCricket) {
+                    returnValue = (el === this.currentPlayer || el.finished || el.score <= playerScore);
+                } else {
+                    returnValue = (el === this.currentPlayer || el.finished || el.score >= playerScore);
+                }
+                return returnValue;
+            });
+        }
+    }
+}
+
+function getCricketTargets(crazy) {
+    crazy = crazy || false;
+    var arr = [];
+    if (crazy) {
+        do {
+            var nb = Math.floor(Math.random() * 20) + 1;
+            if (arr.indexOf(nb) < 0) {
+                arr.push(nb);
+            }
+        } while (arr.length < 6)
+
+        arr.sort(function(a, b) {
+                return b - a;
+        });
+    } else {
+        arr = [20, 19, 18, 17, 16, 15];
+    }
+    arr.push("Bull's eye");
+    return arr;
+}
+
+function getInitialTargetsState(cricketTargets) {
+    var arr = [];
+    for (var i = 0 ; i < cricketTargets.length ; i++) {
+        arr.push({
+            target: cricketTargets[i],
+            state: 0
+        });
+    }
+    return arr;
+}
+
+function computeAverage(player) {
+    if(player.nblegs > 0) {
+        var avg = (player.totalpoints / player.nblegs);
+        avg*=100;
+        avg = parseInt(avg);
+        player.average = avg/100;
+    } else {
+        player.average = 0;
+    }
+}
+
+function findSuggestedFinish(score, nbDartsLeft) {
+    score = Number.parseInt(score);
+    if (score > 180) {
+        return false;
+    }
+
+    var possibleDarts = [];
+    for (var j = 3; j > 0; j--) {
+        for (var i = 20; i > 0; i--) {
+            possibleDarts.push({
+                score: i*j,
+                isDouble: j === 2,
+                notation: (j === 3 ? "T" : (j === 2 ? "D" : "")) + i
+            });
+        }
+    }
+    possibleDarts.push({
+        score: 25,
+        isDouble: false,
+        notation: "Bull"
+    }, {
+        score: 50,
+        isDouble: true,
+        notation: "Double Bull"
+    });
+
+    var found = possibleDarts.find(function(el) {
+        return el.score === score &&
+                (!isDoubleOut || el.isDouble);
+    });
+    if (found) {
+        return [found];
+    } else if (nbDartsLeft > 1) {
+        for (var i = 0; i < possibleDarts.length; i++) {
+            var currentPossibleDart = possibleDarts[i];
+
+            var intermediateTabResult = [currentPossibleDart];
+            var intermediateScore = score - currentPossibleDart.score;
+
+            var foundSecond = possibleDarts.find(function(el) {
+                return el.score === intermediateScore &&
+                        (!isDoubleOut || el.isDouble);
+            });
+            if (foundSecond) {
+                intermediateTabResult.push(foundSecond);
+                return intermediateTabResult;
+            } else if (nbDartsLeft > 2) {
+                for (var j = 0; j < possibleDarts.length; j++) {
+                    var currentPossibleDartDeux = possibleDarts[j];
+
+                    var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
+                    var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
+
+                    var foundThird = possibleDarts.find(function (el) {
+                        return el.score === intermediateScoreDeux &&
+                                (!isDoubleOut || el.isDouble);
+                    });
+                    if (foundThird) {
+                        intermediateTabResultDeux.push(foundThird);
+                        return intermediateTabResultDeux;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+function computeSuggestion(suggestion) {
+    var str = "";
+    for (var i = 0; i < suggestion.length; i++) {
+        str += suggestion[i].notation;
+        if (!(i === suggestion.length - 1)) {
+            str += " ";
+        }
+    }
+    return str;
+}
+
+function computeRank(rank) {
+    var suffix;
+
+    switch (rank) {
+        case 1:
+        case 21:
+            suffix = "st";
+            break;
+        case 2:
+        case 22:
+            suffix = "nd";
+            break;
+        case 3:
+        case 23:
+            suffix = "rd";
+            break;
+        default:
+            suffix = "th";
+    }
+
+    return rank + suffix;
+}
+
+function getCigare(nbDarts) {
+    nbDarts = nbDarts % (7 * 3) || nbDarts;
+    var html = "";
+    for (var i = 0; i < 7; i++) {
+        html += "<div>";
+        for (var j = 0; j < 3; j++) {
+            html += (i * 3 + j) < nbDarts ? "<span class='fill'>" : "<span>";
+            html += "</span>";
+        }
+        html += "</div>";
+    }
+    return html;
+}
+
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
         // --- TMP CODE ---
@@ -69,9 +641,8 @@ document.addEventListener("readystatechange", function() {
         });*/
         // END TMP CODE
 
-
         // var names = [];
-        var players = [];
+        /*var players = [];
         var currentPlayer;
         var nbPlayers = 0;
         var currentIndex = 0;
@@ -108,74 +679,6 @@ document.addEventListener("readystatechange", function() {
             printScore();
         }
 
-        function findSuggestedFinish(score, nbDartsLeft) {
-            score = Number.parseInt(score);
-            if (score > 180) {
-                return false;
-            }
-
-            var possibleDarts = [];
-            for (var j = 3; j > 0; j--) {
-                for (var i = 20; i > 0; i--) {
-                    possibleDarts.push({
-                        score: i*j,
-                        isDouble: j === 2,
-                        notation: (j === 3 ? "T" : (j === 2 ? "D" : "")) + i
-                    });
-                }
-            }
-            possibleDarts.push({
-                score: 25,
-                isDouble: false,
-                notation: "Bull"
-            }, {
-                score: 50,
-                isDouble: true,
-                notation: "Double Bull"
-            });
-
-            var found = possibleDarts.find(function(el) {
-                return el.score === score &&
-                        (!isDoubleOut || el.isDouble);
-            });
-            if (found) {
-                return [found];
-            } else if (nbDartsLeft > 1) {
-                for (var i = 0; i < possibleDarts.length; i++) {
-                    var currentPossibleDart = possibleDarts[i];
-
-                    var intermediateTabResult = [currentPossibleDart];
-                    var intermediateScore = score - currentPossibleDart.score;
-
-                    var foundSecond = possibleDarts.find(function(el) {
-                        return el.score === intermediateScore &&
-                                (!isDoubleOut || el.isDouble);
-                    });
-                    if (foundSecond) {
-                        intermediateTabResult.push(foundSecond);
-                        return intermediateTabResult;
-                    } else if (nbDartsLeft > 2) {
-                        for (var j = 0; j < possibleDarts.length; j++) {
-                            var currentPossibleDartDeux = possibleDarts[j];
-
-                            var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
-                            var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
-
-                            var foundThird = possibleDarts.find(function (el) {
-                                return el.score === intermediateScoreDeux &&
-                                        (!isDoubleOut || el.isDouble);
-                            });
-                            if (foundThird) {
-                                intermediateTabResultDeux.push(foundThird);
-                                return intermediateTabResultDeux;
-                            }
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
         function initGameCricket(reverse, crazy) {
             players = [];
             currentIndex = 0;
@@ -197,49 +700,6 @@ document.addEventListener("readystatechange", function() {
             currentPlayer = players[0];
 
             printScoreCricket();
-        }
-
-        function getCricketTargets(crazy) {
-            crazy = crazy || false;
-            var arr = [];
-            if (crazy) {
-                do {
-                    var nb = Math.floor(Math.random() * 20) + 1;
-                    if (arr.indexOf(nb) < 0) {
-                        arr.push(nb);
-                    }
-                } while (arr.length < 6)
-
-                arr.sort(function(a, b) {
-                        return b - a;
-                });
-            } else {
-                arr = [20, 19, 18, 17, 16, 15];
-            }
-            arr.push("Bull's eye");
-            return arr;
-        }
-
-        function getInitialTargetsState(cricketTargets) {
-            var arr = [];
-            for (var i = 0 ; i < cricketTargets.length ; i++) {
-                arr.push({
-                    target: cricketTargets[i],
-                    state: 0
-                });
-            }
-            return arr;
-        }
-
-        function computeAverage(player) {
-            if(player.nblegs > 0) {
-                var avg = (player.totalpoints / player.nblegs);
-                avg*=100;
-                avg = parseInt(avg);
-                player.average = avg/100;
-            } else {
-                player.average = 0;
-            }
         }
 
         function nextPlayer() {
@@ -496,54 +956,6 @@ document.addEventListener("readystatechange", function() {
             printScoreCricket()();
         }
 
-        function computeSuggestion(suggestion) {
-            var str = "";
-            for (var i = 0; i < suggestion.length; i++) {
-                str += suggestion[i].notation;
-                if (!(i === suggestion.length - 1)) {
-                    str += " ";
-                }
-            }
-            return str;
-        }
-
-        function computeRank(rank) {
-            var suffix;
-
-            switch(rank){
-                case 1:
-                case 21:
-                    suffix = "st";
-                    break;
-                case 2:
-                case 22:
-                    suffix = "nd";
-                    break;
-                case 3:
-                case 23:
-                    suffix = "rd";
-                    break;
-                default:
-                    suffix = "th";
-            }
-
-            return rank + suffix;
-        }
-
-        function getCigare(nbDarts) {
-            nbDarts = nbDarts % (7*3) || nbDarts;
-            var html = "";
-            for(var i = 0; i < 7; i++) {
-                html += "<div>";
-                for(var j = 0; j < 3; j++) {
-                    html += (i*3 + j) < nbDarts ? "<span class='fill'>" : "<span>";
-                    html += "</span>";
-                }
-                html += "</div>";
-            }
-            return html;
-        }
-
         function printScore(updateAverage) {
             scorediv.innerHTML = "";
             for (var i = 0; i < players.length; i++) {
@@ -623,7 +1035,7 @@ document.addEventListener("readystatechange", function() {
             strHtml += "</tr></tfoot></table>";
 
             scorediv.innerHTML = strHtml;
-        }
+        }*/
 
 //        function addPlayer(name) {
 //            names.push(name);
@@ -645,6 +1057,8 @@ document.addEventListener("readystatechange", function() {
         var buttonnextplayercricket = document.getElementById("buttonnextplayercricket");
         var scorediv = document.getElementById("scoreprint");
 
+        var computer;
+
         // Form ajout de player
         addplayerform.addEventListener("submit", function(evt) {
             evt.preventDefault();
@@ -657,36 +1071,57 @@ document.addEventListener("readystatechange", function() {
         // Button start game 301
         buttonstartgame.addEventListener("click", function() {
             var doubleOut = checkboxdoubleout.checked;
-            initGame(doubleOut);
+
+            computer = new Game301Computer(doubleOut);
+            console.log(computer);
+
+            scorediv.innerHTML = computer.printScore();
+//            initGame(doubleOut);
         }, false);
         // Button start game Cricket
         buttonstartgamecricket.addEventListener("click", function() {
             var reverse = checkboxreverse.checked;
             var crazy = checkboxcrazy.checked;
 
-            initGameCricket(reverse, crazy);
+            computer = new GameCricketComputer(reverse, crazy);
+            console.log(computer);
+//            initGameCricket(reverse, crazy);
+
+            scorediv.innerHTML = computer.printScore();
         }, false);
 
         // Button next player
         buttonnextplayer.addEventListener("click", function() {
-            nextPlayer();
+            computer.nextPlayer();
+
+            scorediv.innerHTML = computer.printScore();
         }, false);
         // Button next player cricket
         buttonnextplayercricket.addEventListener("click", function() {
-            nextPlayerCricket();
+            computer.nextPlayer();
+//            nextPlayerCricket();
+
+            scorediv.innerHTML = computer.printScore();
         }, false);
 
         // Form score
         scoreform.addEventListener("submit", function(evt) {
             evt.preventDefault();
-            addDart(inputscore.value);
+
+            computer.addDart(inputscore.value);
+//            addDart(inputscore.value);
             inputscore.value = "";
+
+            scorediv.innerHTML = computer.printScore();
         }, false);
         // Form score cricket
         scoreformcricket.addEventListener("submit", function(evt) {
             evt.preventDefault();
-            addDartCricket(inputscorecricket.value);
+            computer.addDart(inputscorecricket.value);
+//            addDartCricket(inputscorecricket.value);
             inputscorecricket.value = "";
+
+            scorediv.innerHTML = computer.printScore();
         }, false);
     }
 }, false);

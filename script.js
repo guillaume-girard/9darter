@@ -6,6 +6,49 @@ const GAME_REVERSE_CRICKET = "Reverse Cricket";
 const GAME_CRAZY_CRICKET = "Crazy Cricket";
 const GAME_REVERSE_CRAZY_CRICKET = "Reverse Crazy Cricket";
 
+class Player {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+class PlayerCollection {
+    constructor() {
+        this.players = [];
+    }
+
+    addPlayer(player) {
+        if (player instanceof Player) {
+            this.players.push(player);
+        } else {
+            console.error("Wolah boy, t'essaye de me niquer là ? C'est pas un player ça, va chier");
+        }
+    }
+
+    removePlayer(player) {
+        if (player instanceof Player) {
+            let idx = this.players.indexOf(player);
+            if (idx >= 0) {
+                this.players.splice(idx, 1);
+            } else {
+                console.warning("l'est pô dans le tableau ton zigotto");
+            }
+        } else {
+            console.error("Wolah boy, t'essaye de me niquer là ? C'est pas un player ça, va chier");
+        }
+    }
+
+    get size() {
+        return this.players.length;
+    }
+
+    atIndex(index) {
+        return this.players[index];
+    }
+}
+
+const PLAYERS = new PlayerCollection();
+
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
         // --- TMP CODE ---
@@ -27,7 +70,7 @@ document.addEventListener("readystatechange", function() {
         // END TMP CODE
 
 
-        var names = [];
+        // var names = [];
         var players = [];
         var currentPlayer;
         var nbPlayers = 0;
@@ -45,10 +88,11 @@ document.addEventListener("readystatechange", function() {
             players = [];
             currentRank = 1;
             currentIndex = 0;
-            nbPlayers = names.length;
+            nbPlayers = PLAYERS.size;
+            // nbPlayers = names.length;
             for (var i = 0; i < nbPlayers; i++) {
                 players[i] = {
-                    name: names[i],
+                    name: PLAYERS.atIndex(i).name,
                     suggestion: false,
                     score: 301,
                     nblegs: 0,
@@ -140,10 +184,10 @@ document.addEventListener("readystatechange", function() {
             cricketTargetsClosed = [];
             reverseCricket = reverse;
 
-            nbPlayers = names.length;
+            nbPlayers = PLAYERS.size;
             for (var i = 0; i < nbPlayers; i++) {
                 players[i] = {
-                    name: names[i],
+                    name: PLAYERS.atIndex(i).name,
                     score: 0,
                     targetsState: getInitialTargetsState(cricketTargets),
                     finished: false,
@@ -209,7 +253,8 @@ document.addEventListener("readystatechange", function() {
                 currentPlayer.nblegs++;
                 currentPlayer.suggestion = findSuggestedFinish(currentPlayer.score, 3);
                 currentPlayer = players[currentIndex];
-                if (currentRank === names.length) {
+                if (currentRank === PLAYERS.size) {
+                // if (currentRank === names.length) {
                     currentPlayer.rank = currentRank;
                     currentPlayer = null;
                 } else {
@@ -229,7 +274,8 @@ document.addEventListener("readystatechange", function() {
                 nextPlayerCricket();
             } else {
                 currentPlayer = players[currentIndex];
-                if (currentRank === names.length) {
+                if (currentRank === PLAYERS.size) {
+                // if (currentRank === names.length) {
                     currentPlayer.rank = currentRank;
                     currentPlayer.finished = true;
                     currentPlayer = null;
@@ -579,9 +625,9 @@ document.addEventListener("readystatechange", function() {
             scorediv.innerHTML = strHtml;
         }
 
-        function addPlayer(name) {
-            names.push(name);
-        }
+//        function addPlayer(name) {
+//            names.push(name);
+//        }
 
         // DOM instances
         var addplayerform = document.getElementById("addplayer");
@@ -602,7 +648,9 @@ document.addEventListener("readystatechange", function() {
         // Form ajout de player
         addplayerform.addEventListener("submit", function(evt) {
             evt.preventDefault();
-            addPlayer(inputplayername.value);
+
+            PLAYERS.addPlayer(new Player(inputplayername.value));
+            // addPlayer(inputplayername.value);
             inputplayername.value = "";
         }, false);
 

@@ -294,21 +294,15 @@ main,
     justify-content: flex-end;
 }
 
-#controlcricket,
 #controltrois {
-    display: none;
+    display: flex;
 }
 
-#scoreform,
-#scoreformcricket {
+#scoreform {
     display:flex;
     flex-direction: column;
     justify-content:space-around;
     padding-right:40px;
-}
-
-#controletrois {
-
 }
 
 #inputscore {
@@ -320,15 +314,13 @@ main,
     text-align: center;
 }
 
-#validtrois,
-#validcricket {
+#validtrois {
     background-image: url('img/score.png');
     background-size: cover;
     height: 150px;
 }
 
-#buttonnextplayer,
-#buttonnextplayercricket{
+#buttonnextplayer {
     background-image: url('img/next.png');
     background-size: cover;
     width: 200px;

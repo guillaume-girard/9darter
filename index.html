@@ -17,7 +17,7 @@
         <main>
             <section id="playercontrol">
                 <img src="img/players.jpg" alt="awesome players">
-                <form id="addplayer">
+                <form id="addplayer" autocomplete="off">
                     <input id="inputplayername" type="text" name="playername" placeholder="Nom du joueur"/>
                     <input type="submit" value="Ajouter" />
                 </form>
@@ -57,21 +57,12 @@
         <!-- score control -->
         <div id="scorecontrol">
             <div id="controltrois">
-                <form id="scoreform">
+                <form id="scoreform" autocomplete="off">
                     <input id="inputscore" type="text" name="score" />
                     <input id="validtrois" type="submit" value="" />
                 </form>
 
                 <button id="buttonnextplayer"></button>
-            </div>
-
-            <div id="controlcricket">
-                <form id="scoreformcricket">
-                    <input id="inputscorecricket" type="text" name="score" />
-                    <input id="validcricket" type="submit" value="" />
-                </form>
-
-                <button id="buttonnextplayercricket"></button>
             </div>
         </div>
 

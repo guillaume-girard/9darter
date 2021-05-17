@@ -1,5 +1,7 @@
 "use strict";
 
+console.log("prout");
+
 const GAME_301 = "301";
 const GAME_CRICKET = "Cricket";
 const GAME_REVERSE_CRICKET = "Reverse Cricket";
@@ -559,6 +561,31 @@ function computeAverage(player) {
     } else {
         player.average = 0;
     }
+}
+
+function findBestDart(score) {
+    if (score > 60) {
+        return false;
+    }
+    
+    if (score < 20) {
+        return 's' + score;
+    }
+    
+    if (score < 40 && score % 2 === 0) {
+        return 'd' + score / 2;
+    }
+    
+    
+    if (score <= 60 && score % 3 === 0) {
+        return 't' + score / 3;
+    }
+    
+    return false;
+}
+
+function suggestDart(score, nbDart) {
+    
 }
 
 function findSuggestedFinish(score, nbDartsLeft) {

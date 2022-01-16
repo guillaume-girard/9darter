@@ -209,7 +209,7 @@ class Game301Computer extends GameComputer {
 
     findSuggestedFinish(score, nbDartsLeft) {
         score = Number.parseInt(score);
-        if (score > 180) {
+        if (score > 170) {
             return false;
         }
 
@@ -563,99 +563,6 @@ function computeAverage(player) {
     }
 }
 
-function findBestDart(score) {
-    if (score > 60) {
-        return false;
-    }
-    
-    if (score < 20) {
-        return 's' + score;
-    }
-    
-    if (score < 40 && score % 2 === 0) {
-        return 'd' + score / 2;
-    }
-    
-    
-    if (score <= 60 && score % 3 === 0) {
-        return 't' + score / 3;
-    }
-    
-    return false;
-}
-
-function suggestDart(score, nbDart) {
-    
-}
-
-function findSuggestedFinish(score, nbDartsLeft) {
-    score = Number.parseInt(score);
-    if (score > 180) {
-        return false;
-    }
-
-    var possibleDarts = [];
-    for (var j = 3; j > 0; j--) {
-        for (var i = 20; i > 0; i--) {
-            possibleDarts.push({
-                score: i*j,
-                isDouble: j === 2,
-                notation: (j === 3 ? "T" : (j === 2 ? "D" : "")) + i
-            });
-        }
-    }
-    possibleDarts.push({
-        score: 25,
-        isDouble: false,
-        notation: "Bull"
-    }, {
-        score: 50,
-        isDouble: true,
-        notation: "Double Bull"
-    });
-
-    var found = possibleDarts.find(function(el) {
-        return el.score === score &&
-                (!this.isDoubleOut || el.isDouble);
-    }.bind(this));
-    if (found) {
-        return [found];
-    } else if (nbDartsLeft > 1) {
-        for (var i = 0; i < possibleDarts.length; i++) {
-            var currentPossibleDart = possibleDarts[i];
-
-            var intermediateTabResult = [currentPossibleDart];
-            var intermediateScore = score - currentPossibleDart.score;
-
-            var foundSecond = possibleDarts.find(function(el) {
-                return el.score === intermediateScore &&
-                        (!this.isDoubleOut || el.isDouble);
-            }.bind(this));
-            if (foundSecond) {
-                intermediateTabResult.push(foundSecond);
-                return intermediateTabResult;
-            } else if (nbDartsLeft > 2) {
-                for (var j = 0; j < possibleDarts.length; j++) {
-                    var currentPossibleDartDeux = possibleDarts[j];
-
-                    var intermediateTabResultDeux = intermediateTabResult.concat([currentPossibleDartDeux]);
-                    var intermediateScoreDeux = intermediateScore - currentPossibleDartDeux.score;
-
-                    var foundThird = possibleDarts.find(function (el) {
-                        return el.score === intermediateScoreDeux &&
-                                (!this.isDoubleOut || el.isDouble);
-                    }.bind(this));
-                    if (foundThird) {
-                        intermediateTabResultDeux.push(foundThird);
-                        return intermediateTabResultDeux;
-                    }
-                }
-            }
-        }
-    }
-    return false;
-}
-
 function computeSuggestion(suggestion) {
     var str = "";
     for (var i = 0; i < suggestion.length; i++) {
@@ -706,29 +613,10 @@ function getCigare(nbDarts) {
 
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
-        // --- TMP CODE ---
-        /*document.getElementById("tmp_form").addEventListener("submit", function(evt) {
-            evt.preventDefault();
-            var val = document.getElementById("tmp_input").value;
-            document.getElementById("tmp_input").value = "";
-            var letruc = findSuggestedFinish(val, 3);
-            var str = "";
-            if (!letruc) {
-                str += "Pas trouvé";
-            } else {
-                for (var lu = 0; lu < letruc.length; lu++) {
-                    str += letruc[lu].notation + " ";
-                }
-            }
-            console.log("Finish:", str, letruc);
-        });*/
-        // END TMP CODE
 
         // DOM instances
         var addplayerform = document.getElementById("addplayer");
         var scoreform = document.getElementById("scoreform");
-        // var controltrois = document.getElementById("controltrois");
-        // var controlcricket = document.getElementById("controlcricket");
         var scoreformcricket = document.getElementById("scoreformcricket");
         var inputplayername = document.getElementById("inputplayername");
         var inputscore = document.getElementById("inputscore");

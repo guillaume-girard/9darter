@@ -57,6 +57,8 @@ class GameComputer {
         this.currentRank = 1;
         this.currentPlayer = null;
         this.currentIndex = 0;
+
+        this.snapshot = [];
     }
 
     get nbPlayers() {
@@ -79,8 +81,12 @@ class GameComputer {
         return;
     }
 
-    cancelLastDart() {
-        return;
+    createSnapshot() {
+        return "";
+    }
+
+    restoreSnapshot() {
+        return "";
     }
 }
 
@@ -106,10 +112,29 @@ class Game301Computer extends GameComputer {
         this.setFirstPlayer();
     }
 
-    cancelLastDart() {
-        this.currentPlayer.nbDarts--;
-        this.currentPlayer.totalpoints -= lastDart;
-        this.currentPlayer.score += lastDart;
+    createSnapshot() {
+        // Create the snapshot
+        var snapshot = {
+            "players": JSON.parse(JSON.stringify(this.players)),
+            "currentRank": JSON.parse(JSON.stringify(this.currentRank)),
+            "currentIndex": JSON.parse(JSON.stringify(this.currentIndex))
+        };
+
+        // Store the snapshot
+        this.snapshot.push(snapshot);
+    }
+
+    restoreSnapshot() {
+        if (this.snapshot.length > 0) {
+            var snapshot = this.snapshot.pop();
+
+            this.players = JSON.parse(JSON.stringify(snapshot.players));
+            this.currentRank = JSON.parse(JSON.stringify(snapshot.currentRank));
+            this.currentIndex = JSON.parse(JSON.stringify(snapshot.currentIndex));
+            this.currentPlayer = this.players[this.currentIndex];
+
+            this.printScore(true);
+        }
     }
 
     printScore(updateAverage) {
@@ -131,12 +156,14 @@ class Game301Computer extends GameComputer {
 
     addDart(value) {
         if (value === "c") {
-            this.cancelLastDart();
+            this.restoreSnapshot();
         } else if (value === "n") {
             this.nextPlayer();
         } else if (/^[0-9]+$/.test(value)) {
+            this.createSnapshot();
+
             value = parseInt(value);
-            this.lastDart = value;
+
             this.currentPlayer.nbDarts++;
             this.currentPlayer.totalpoints += value;
             this.currentPlayer.score -= value;
@@ -151,6 +178,8 @@ class Game301Computer extends GameComputer {
                 this.nextPlayer();
             }
         } else if (/[t,d][0-9]+/i.test(value)) {
+            this.createSnapshot();
+
             var firstChar = (value.slice(0, 1)).toLowerCase();
             var multiplyBy = firstChar === "d" ? 2 : 3;
             value = parseInt(value.slice(1));
@@ -166,7 +195,6 @@ class Game301Computer extends GameComputer {
 
             value *= multiplyBy;
 
-            this.lastDart = value;
             this.currentPlayer.nbDarts++;
             this.currentPlayer.totalpoints += value;
             this.currentPlayer.score -= value;
@@ -287,6 +315,8 @@ class GameCricketComputer extends GameComputer {
             this.players[i] = {
                 name: PLAYERS.atIndex(i).name,
                 score: 0,
+                nbDarts: 0,
+                accuracy: 0,
                 targetsState: getInitialTargetsState(this.targets),
                 finished: false,
                 rank: null
@@ -296,7 +326,34 @@ class GameCricketComputer extends GameComputer {
         this.setFirstPlayer();
     }
 
-    printScore() {
+    createSnapshot() {
+        // Create the snapshot
+        var snapshot = {
+            "players": JSON.parse(JSON.stringify(this.players)),
+            "currentRank": JSON.parse(JSON.stringify(this.currentRank)),
+            "currentIndex": JSON.parse(JSON.stringify(this.currentIndex)),
+            "targetsClosed": JSON.parse(JSON.stringify(this.targetsClosed))
+        };
+
+        // Store the snapshot
+        this.snapshot.push(snapshot);
+    }
+
+    restoreSnapshot() {
+        if (this.snapshot.length > 0) {
+            var snapshot = this.snapshot.pop();
+
+            this.players = JSON.parse(JSON.stringify(snapshot.players));
+            this.currentRank = JSON.parse(JSON.stringify(snapshot.currentRank));
+            this.currentIndex = JSON.parse(JSON.stringify(snapshot.currentIndex));
+            this.currentPlayer = this.players[this.currentIndex];
+            this.targetsClosed = JSON.parse(JSON.stringify(snapshot.targetsClosed));
+
+            this.printScore(true);
+        }
+    }
+
+    printScore(updateAccuracy) {
         var strHtml = "";
 
         strHtml = "";
@@ -307,7 +364,12 @@ class GameCricketComputer extends GameComputer {
         strHtml += "<th></th>";
         for (var i = 0; i < this.nbPlayers; i++) {
             var p = this.players[i];
-            strHtml += "<th" + (p === this.currentPlayer ? " class='current'" : "") + ">" + p.name + "</th>";
+            var accuracy = "--";
+            if (updateAccuracy)
+                accuracy = computeAccuracy(p);
+            strHtml += "<th" + (p === this.currentPlayer ? " class='current'" : "") + ">" 
+                    + p.name + "<br />"
+                    + accuracy + "</th>";
         }
         strHtml += "</tr></thead><tbody>";
 
@@ -364,10 +426,13 @@ class GameCricketComputer extends GameComputer {
 
     addDart(value) {
         if (value === "c") {
-            this.cancelLastDart();
+            this.restoreSnapshot();
         } else if (value === "n") {
             this.nextPlayer();
         } else if (/^[t,d]?[0-9b]+/i.test(value)) {
+            this.createSnapshot();
+
+            this.currentPlayer.nbDarts++;
             var firstChar = (value.slice(0, 1)).toLowerCase();
             var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
             value = multiplyBy > 1 ? value.slice(1) : value;
@@ -383,6 +448,7 @@ class GameCricketComputer extends GameComputer {
             }
 
             if (this.targets.indexOf(value) >= 0) {
+                this.currentPlayer.accuracy += multiplyBy * multiplyBy;
                 this.score(multiplyBy, value);
             }
 
@@ -427,15 +493,17 @@ class GameCricketComputer extends GameComputer {
                 }
             }
         } else {
-            console.log("invalid score");
+            console.warn("invalid score: " + value);
         }
     }
 
     nextPlayer() {
         this.currentIndex++;
+
         if (this.currentIndex >= this.nbPlayers) {
             this.currentIndex = 0;
         }
+
         if (this.players[this.currentIndex].finished) {
             this.nextPlayer();
         } else {
@@ -446,6 +514,7 @@ class GameCricketComputer extends GameComputer {
                 this.currentPlayer = null;
             }
         }
+
         return;
     }
 
@@ -563,6 +632,19 @@ function computeAverage(player) {
     }
 }
 
+function computeAccuracy(player) {
+    var value = "--";
+
+    if(player.nbDarts > 0) {
+        var accuracy = (player.accuracy / player.nbDarts);
+        accuracy*=100;
+        accuracy = parseInt(accuracy);
+        value = accuracy/100;
+    }
+
+    return value;
+}
+
 function computeSuggestion(suggestion) {
     var str = "";
     for (var i = 0; i < suggestion.length; i++) {
@@ -626,7 +708,6 @@ document.addEventListener("readystatechange", function() {
         var checkboxreverse = document.getElementById("checkboxreverse");
         var checkboxcrazy = document.getElementById("checkboxcrazy");
         var buttonnextplayer = document.getElementById("buttonnextplayer");
-        var buttonnextplayercricket = document.getElementById("buttonnextplayercricket");
         var scorediv = document.getElementById("scoreprint");
 
         var computer;

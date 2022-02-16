@@ -3,6 +3,8 @@
 console.log("prout");
 
 const GAME_301 = "301";
+const GAME_501 = "501";
+const GAME_701 = "701";
 const GAME_CRICKET = "Cricket";
 const GAME_REVERSE_CRICKET = "Reverse Cricket";
 const GAME_CRAZY_CRICKET = "Crazy Cricket";
@@ -214,6 +216,8 @@ class Game301Computer extends GameComputer {
     }
 
     nextPlayer() {
+        temporaryDisableNextPlayerButton();
+
         this.currentIndex++;
         if (this.currentIndex >= this.nbPlayers) {
             this.currentIndex = 0;
@@ -498,6 +502,8 @@ class GameCricketComputer extends GameComputer {
     }
 
     nextPlayer() {
+        temporaryDisableNextPlayerButton();
+
         this.currentIndex++;
 
         if (this.currentIndex >= this.nbPlayers) {
@@ -693,6 +699,14 @@ function getCigare(nbDarts) {
     return html;
 }
 
+function temporaryDisableNextPlayerButton(ms) {
+    ms = ms || 3000;
+    buttonnextplayer.disabled = true;
+    window.setTimeout(function() {
+        buttonnextplayer.disabled = false;
+    }, ms);
+}
+
 document.addEventListener("readystatechange", function() {
     if (document.readyState === "complete") {
 
@@ -717,7 +731,7 @@ document.addEventListener("readystatechange", function() {
             evt.preventDefault();
 
             PLAYERS.addPlayer(new Player(inputplayername.value));
-            // addPlayer(inputplayername.value);
+
             inputplayername.value = "";
         }, false);
 

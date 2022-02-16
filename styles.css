@@ -325,6 +325,9 @@ main,
     background-size: cover;
     width: 200px;
 }
+#buttonnextplayer[disabled] {
+    opacity: .2;
+}
 
 #inputscorecricket {
     border: 2px solid grey;

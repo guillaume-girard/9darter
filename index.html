@@ -26,20 +26,47 @@
             <section id="troiscentun">
                 <div class="control">
                     <input type="checkbox" id="checkboxdoubleout" value="true"/>
-                    <label>Double-out</label>
-                    <button id="startgameButton">Commencer le 301</button>
-                    <img class="gameimg" src="img/301.png" alt="301 logo">
+                    <label for="checkboxdoubleout">Double-out</label>
+                    <div id="startgamex01div">
+                        <button class="startgamex01Button" id="startgameButton">Commencer le 301</button>
+                        <button class="startgamex01Button" id="startgameButton501">Commencer le 501</button>
+                    </div>
+                    <img class="gameimg" src="img/301.png" alt="301 logo" />
+                </div>
+                <div id="bullshitdiv">
+                    <span>Nombre de legs :</span>
+                    <div>
+                        <input type="radio" id="leg_radio_01" name="nb_leg" value="1" checked><label for="leg_radio_01">1</label><br>
+                    </div>
+                    <div>
+                        <input type="radio" id="leg_radio_03" name="nb_leg" value="3"><label for="leg_radio_03">3</label><br>
+                    </div>
+                    <div>
+                        <input type="radio" id="leg_radio_05" name="nb_leg" value="5"><label for="leg_radio_05">5</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="leg_radio_07" name="nb_leg" value="7"><label for="leg_radio_07">7</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="leg_radio_09" name="nb_leg" value="9"><label for="leg_radio_09">9</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="leg_radio_11" name="nb_leg" value="11"><label for="leg_radio_11">11</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="leg_radio_13" name="nb_leg" value="13"><label for="leg_radio_13">13</label>
+                    </div>
                 </div>
             </section>
 
             <section id="cricket">
                 <div class="control">
-                    <label>Reverse :</label>
-                    <input type="checkbox" id="checkboxreverse" value="true"/>
-                    <label>Crazy :</label>
-                    <input type="checkbox" id="checkboxcrazy" value="true"/>
+                    <label for="checkboxreverse">Reverse :</label>
+                    <input type="checkbox" id="checkboxreverse" value="true" />
+                    <label for="checkboxcrazy">Crazy :</label>
+                    <input type="checkbox" id="checkboxcrazy" value="true" />
                     <button id="startcricketButton">Commencer le Cricket</button>
-                    <img class="gameimg" src="img/cricket.png" alt="cricket logo">
+                    <img class="gameimg" src="img/cricket.png" alt="cricket logo" />
                 </div>
             </section>
 

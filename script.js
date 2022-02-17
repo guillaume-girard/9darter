@@ -94,35 +94,51 @@ class GameComputer {
     }
 }
 
-class Game301Computer extends GameComputer {
-    constructor(doubleOut) {
+class Gamex01Computer extends GameComputer {
+    constructor(type, doubleOut, nbLegsGame) {
         super();
+        
+        switch (type) {
+            case GAME_501:
+                this.startScore = 501;
+                break;
+            case GAME_301:
+            default:
+                this.startScore = 301;
+                break;
+        }
         this.isDoubleOut = doubleOut || false;
+        this.nbLegsGame = Number.parseInt(nbLegsGame) || 1;
 
         for (var i = 0; i < PLAYERS.size; i++) {
             this.players[i] = {
                 name: PLAYERS.atIndex(i).name,
                 suggestion: false,
-                score: 301,
-                nblegs: 0,
+                score: this.startScore,
+                nbLegs: 0,
+                nbVolleys: 0,
                 nbDarts: 0,
                 totalpoints: 0,
                 average: 0,
+                finished: false,
                 rank: null
             };
         }
-        this.scoreAtFirst = 301;
+        this.currentPlayerScoreAtFirst = this.startScore;
+        this.indexFirstThrower = 0;
 
         this.setFirstPlayer();
     }
 
     createSnapshot() {
         // Create the snapshot
-        var snapshot = {
+        let snapshot = {
             "players": JSON.parse(JSON.stringify(this.players)),
             "currentRank": JSON.parse(JSON.stringify(this.currentRank)),
             "currentIndex": JSON.parse(JSON.stringify(this.currentIndex)),
-            "nbDartsLeftToCurrentPlayer": JSON.parse(JSON.stringify(this.nbDartsLeftToCurrentPlayer))
+            "nbDartsLeftToCurrentPlayer": JSON.parse(JSON.stringify(this.nbDartsLeftToCurrentPlayer)),
+            "currentPlayerScoreAtFirst": JSON.parse(JSON.stringify(this.currentPlayerScoreAtFirst)),
+            "indexFirstThrower": JSON.parse(JSON.stringify(this.indexFirstThrower))
         };
 
         // Store the snapshot
@@ -131,13 +147,15 @@ class Game301Computer extends GameComputer {
 
     restoreSnapshot() {
         if (this.snapshot.length > 0) {
-            var snapshot = this.snapshot.pop();
+            let snapshot = this.snapshot.pop();
 
             this.players = JSON.parse(JSON.stringify(snapshot.players));
             this.currentRank = JSON.parse(JSON.stringify(snapshot.currentRank));
             this.currentIndex = JSON.parse(JSON.stringify(snapshot.currentIndex));
             this.currentPlayer = this.players[this.currentIndex];
             this.nbDartsLeftToCurrentPlayer = JSON.parse(JSON.stringify(snapshot.nbDartsLeftToCurrentPlayer));
+            this.currentPlayerScoreAtFirst = JSON.parse(JSON.stringify(snapshot.currentPlayerScoreAtFirst));
+            this.indexFirstThrower = JSON.parse(JSON.stringify(snapshot.indexFirstThrower));
 
             this.printScore(true);
         }
@@ -152,11 +170,13 @@ class Game301Computer extends GameComputer {
             if (updateAverage)
                 computeAverage(p);
             htmlVar +=
-                    "<div class='score'><h2" + (p === this.currentPlayer ? " class='current'" : "") + ">" + p.name + "</h2>" +
+                    "<div class='scoreline" + (p === this.currentPlayer ? " current" : "") + (p.finished ? " finished" : "") + "'><h2>" + p.name + "</h2>" +
                     "<span class='suggestion'>" + (p.suggestion ? computeSuggestion(p.suggestion) : "") + "</span>" +
-                    "<span>" + (p.rank !== null ? computeRank(p.rank) : p.score) + "</span>" +
+                    "<span class='score'>" + (p.rank !== null ? computeRank(p.rank) : p.score) + "</span>" +
                     "<div class='cigare'>" + getCigare(p.nbDarts) + "</div>" +
-                    "</div><div class='average'>Average : <span>" + p.average + "</span></div>";
+                    "<span>" + p.nbLegs + "</span>" +
+                    "<div class='average'>Average : <span>" + p.average + "</span></div>" +
+                    "</div>";
         }
 
         return htmlVar;
@@ -175,7 +195,7 @@ class Game301Computer extends GameComputer {
             var firstChar = (value.slice(0, 1)).toLowerCase();
             var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
             value = multiplyBy > 1 ? value.slice(1) : value;
-            value = value === "b" ? 25 : parseInt(value);
+            value = value === "b" ? 25 : Number.parseInt(value);
 
             // van gerwen
             if (value === 20 && multiplyBy === 3) {
@@ -193,13 +213,90 @@ class Game301Computer extends GameComputer {
             this.currentPlayer.score -= value;
             this.currentPlayer.suggestion = this.findSuggestedFinish(this.currentPlayer.score, this.nbDartsLeftToCurrentPlayer);
 
-            if (this.currentPlayer.score === 0) {
-                this.currentPlayer.rank = this.currentRank++;
-                this.nextPlayer();
-            } else if (this.currentPlayer.score < 0 ||
-                    (this.currentPlayer.score < 2 && this.isDoubleOut)) {
-                this.currentPlayer.score = this.scoreAtFirst;
-                this.nextPlayer();
+            if (this.nbLegsGame === 1) {
+                /* Ancien code : dans le cas d'un jeu à 3+ joueurs en une seul leg, on continue
+                 * la partie tant que des joueurs n'ont pas fini
+                 */
+                 if (
+                        (this.currentPlayer.score === 0 && this.isDoubleOut && multiplyBy !== 2) || 
+                        this.currentPlayer.score < 0 ||
+                        (this.currentPlayer.score === 1 && this.isDoubleOut)) {
+                    // BUST!
+                    var spanBust = document.createElement('span');
+                    spanBust.innerText = "BUST!";
+                    spanBust.className = "spanbust";
+                    document.body.appendChild(spanBust);
+
+                    this.currentPlayer.score = this.currentPlayerScoreAtFirst;
+                    this.nextPlayer();
+                } else if (this.currentPlayer.score === 0) {
+                    this.currentPlayer.finished = true;
+                    this.currentPlayer.rank = this.currentRank++;
+                    this.nextPlayer();
+                }
+            } else {
+                /* Nouveau code : dans le cas d'un jeu à plusieurs legs la leg se termine
+                 * dès qu'un joueur atteint 301 et c'est au joueur suivant de commencer la
+                 * nouvelle leg. On continue de jouer jusqu'à ce que tous les joueurs (sauf un)
+                 * aient atteint le nombre requis de legs
+                 */
+                 if (
+                        (this.currentPlayer.score === 0 && this.isDoubleOut && multiplyBy !== 2) || 
+                        this.currentPlayer.score < 0 ||
+                        (this.currentPlayer.score === 1 && this.isDoubleOut)) {
+                    // BUST!
+                    var spanBust = document.createElement('span');
+                    spanBust.innerText = "BUST!";
+                    spanBust.className = "spanbust";
+                    document.body.appendChild(spanBust);
+
+                    this.currentPlayer.score = this.currentPlayerScoreAtFirst;
+                    this.nextPlayer();
+                } else if (this.currentPlayer.score === 0) {
+                    // Le joueur a fini un x01 : leg++ et endGame?
+                    temporaryDisableNextPlayerButton();
+                    // LEG!
+                    var spanLeg = document.createElement('span');
+                    spanLeg.innerText = "LEG!";
+                    spanLeg.className = "spanbust";
+                    document.body.appendChild(spanLeg);
+
+                    this.currentPlayer.nbLegs++;
+                    this.currentPlayer.nbVolleys++;
+                    
+                    if (this.currentPlayer.nbLegs > this.nbLegsGame / 2) {
+                        this.currentPlayer.finished = true;
+                        this.currentPlayer.rank = this.currentRank++;
+                    }
+                    
+                    // leg +1 et reload du game
+                    this.indexFirstThrower++;
+                    if (this.indexFirstThrower >= this.nbPlayers) {
+                        this.indexFirstThrower = 0;
+                    }
+                    while (this.players[this.indexFirstThrower].finished) {
+                        this.indexFirstThrower++;
+                        if (this.indexFirstThrower >= this.nbPlayers) {
+                            this.indexFirstThrower = 0;
+                        }
+                    }
+
+                    this.currentPlayer = this.players[this.indexFirstThrower];
+                    
+                    if (this.currentRank === this.nbPlayers) {
+                        this.currentPlayer.rank = this.currentRank;
+                        this.currentPlayer.suggestion = false;
+                        this.currentPlayer = null;
+                    } else {
+                        this.currentIndex = this.indexFirstThrower;
+                        this.nbDartsLeftToCurrentPlayer = 3;
+                        this.players.forEach(function(el) {
+                            el.score = this.startScore;
+                            el.suggestion = false;
+                            el.nbDarts = 0;
+                        }.bind(this));
+                    } 
+                } 
             }
         } else {
             console.warn("invalid score: " + value);
@@ -210,13 +307,14 @@ class Game301Computer extends GameComputer {
         temporaryDisableNextPlayerButton();
 
         this.currentIndex++;
+
         if (this.currentIndex >= this.nbPlayers) {
             this.currentIndex = 0;
         }
-        if (this.players[this.currentIndex].score === 0) {
+        if (this.players[this.currentIndex].finished) {
             this.nextPlayer();
         } else {
-            this.currentPlayer.nblegs++;
+            this.currentPlayer.nbVolleys++;
             this.currentPlayer.suggestion = this.findSuggestedFinish(this.currentPlayer.score, 3);
             this.currentPlayer = this.players[this.currentIndex];
             if (this.currentRank === this.nbPlayers) {
@@ -224,7 +322,7 @@ class Game301Computer extends GameComputer {
                 this.currentPlayer.suggestion = false;
                 this.currentPlayer = null;
             } else {
-                this.scoreAtFirst = this.currentPlayer.score;
+                this.currentPlayerScoreAtFirst = this.currentPlayer.score;
                 this.nbDartsLeftToCurrentPlayer = 3;
             }
         }
@@ -436,7 +534,7 @@ class GameCricketComputer extends GameComputer {
             var firstChar = (value.slice(0, 1)).toLowerCase();
             var multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
             value = multiplyBy > 1 ? value.slice(1) : value;
-            value = value === "b" ? "Bull's eye" : parseInt(value);
+            value = value === "b" ? "Bull's eye" : Number.parseInt(value);
 
             // van gerwen
             if (value === 20 && multiplyBy === 3) {
@@ -448,6 +546,7 @@ class GameCricketComputer extends GameComputer {
             }
 
             if (this.targets.indexOf(value) >= 0) {
+                // @TODO accuracy should not count when the target is closed
                 this.currentPlayer.accuracy += multiplyBy * multiplyBy;
                 this.score(multiplyBy, value);
             }
@@ -626,10 +725,10 @@ function getInitialTargetsState(cricketTargets) {
 }
 
 function computeAverage(player) {
-    if(player.nblegs > 0) {
-        var avg = (player.totalpoints / player.nblegs);
+    if(player.nbVolleys > 0) {
+        var avg = (player.totalpoints / player.nbVolleys);
         avg*=100;
-        avg = parseInt(avg);
+        avg = Number.parseInt(avg);
         player.average = avg/100;
     } else {
         player.average = 0;
@@ -642,7 +741,7 @@ function computeAccuracy(player) {
     if(player.nbDarts > 0) {
         var accuracy = (player.accuracy / player.nbDarts);
         accuracy*=100;
-        accuracy = parseInt(accuracy);
+        accuracy = Number.parseInt(accuracy);
         value = accuracy/100;
     }
 
@@ -728,7 +827,9 @@ document.addEventListener("readystatechange", function() {
         var inputplayername = document.getElementById("inputplayername");
         var inputscore = document.getElementById("inputscore");
         var buttonstartgame = document.getElementById("startgameButton");
+        var buttonstartgame501 = document.getElementById("startgameButton501");
         var checkboxdoubleout = document.getElementById("checkboxdoubleout");
+        var nblegsradio = document.getElementsByName("nb_leg");
         var buttonstartgamecricket = document.getElementById("startcricketButton");
         var checkboxreverse = document.getElementById("checkboxreverse");
         var checkboxcrazy = document.getElementById("checkboxcrazy");
@@ -751,7 +852,38 @@ document.addEventListener("readystatechange", function() {
         buttonstartgame.addEventListener("click", function() {
             var doubleOut = checkboxdoubleout.checked;
 
-            computer = new Game301Computer(doubleOut);
+            var i = 0;
+            var nbLegs = 1;
+            let found = false;
+            do {
+                if (nblegsradio[i].checked) {
+                    nbLegs = nblegsradio[i].value;
+                    found = true;
+                }
+                i++;
+            } while(!found || i < nblegsradio.length)
+
+            computer = new Gamex01Computer(GAME_301, doubleOut, nbLegs);
+
+            inputscore.focus();
+            scorediv.innerHTML = computer.printScore();
+        }, false);
+        // Button start game 501
+        buttonstartgame501.addEventListener("click", function() {
+            var doubleOut = checkboxdoubleout.checked;
+
+            var i = 0;
+            var nbLegs = 1;
+            let found = false;
+            do {
+                if (nblegsradio[i].checked) {
+                    nbLegs = nblegsradio[i].value;
+                    found = true;
+                }
+                i++;
+            } while(!found || i < nblegsradio.length)
+
+            computer = new Gamex01Computer(GAME_501, doubleOut, nbLegs);
 
             inputscore.focus();
             scorediv.innerHTML = computer.printScore();

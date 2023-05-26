@@ -13,7 +13,7 @@ export class InputTargetComponent implements OnInit {
   targetValue: string = '';
 
   constructor(private service: InputTargetService) {
-    for (let i = 1; i<=20; i++) {
+    for (let i = 1; i <= 20; i++) {
       for (let prefix of ['', 'd', 't']) {
         this.validTargetValues.push(prefix + i);
       }

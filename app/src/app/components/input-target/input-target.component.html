@@ -1,6 +1,6 @@
 <div id="input-target-container">
-  <form>
+  <form (ngSubmit)="onSubmitTarget()">
     <input type="text" [(ngModel)]="targetValue" [ngModelOptions]="{standalone: true}" />
-    <button type="submit" (click)="onSubmitTarget()">OK</button>
+    <button type="submit">OK</button>
   </form>
 </div>

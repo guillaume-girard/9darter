@@ -11,19 +11,19 @@ export class PlayerListComponent {
   players!: Player[];
   playerName: string = '';
 
-  constructor(private service: PlayerService) { }
+  constructor(private playerService: PlayerService) { }
 
   ngOnInit(): void {
-    this.players = this.service.getPlayers();
+    this.players = this.playerService.getPlayers();
   }
 
   removePlayer(playerId: number): void {
-    this.service.removePlayer(playerId);
+    this.playerService.removePlayer(playerId);
   }
 
   onSubmitNewPlayer(): void {
     if (this.playerName.length > 0) {
-      this.service.addPlayer(this.playerName);
+      this.playerService.addPlayer(this.playerName);
       this.playerName = '';
     }
   }

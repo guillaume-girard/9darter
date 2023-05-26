@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Player } from 'src/app/models/player.model';
+import { PlayerService } from 'src/app/services/players.service';
 
 @Component({
   selector: 'app-player-list',
@@ -7,27 +8,22 @@ import { Player } from 'src/app/models/player.model';
   styleUrls: ['./player-list.component.scss']
 })
 export class PlayerListComponent {
-  players: Player[] = [];
+  players!: Player[];
   playerName: string = '';
-  lastPlayerId = 0;
-  
-  addPlayer(player: Player): void {
-    this.players.push(player);
+
+  constructor(private service: PlayerService) { }
+
+  ngOnInit(): void {
+    this.players = this.service.getPlayers();
   }
 
   removePlayer(playerId: number): void {
-    let playerToRemove = this.players.find(player => player.id === playerId);
-
-    if (playerToRemove) {
-      let playerIndexToRemove = this.players.indexOf(playerToRemove);
-      this.players.splice(playerIndexToRemove, 1);
-    }
+    this.service.removePlayer(playerId);
   }
 
   onSubmitNewPlayer(): void {
     if (this.playerName.length > 0) {
-      let newPlayer: Player = { id: this.lastPlayerId++, name: this.playerName };
-      this.addPlayer(newPlayer);
+      this.service.addPlayer(this.playerName);
       this.playerName = '';
     }
   }

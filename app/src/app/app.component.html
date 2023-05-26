@@ -4,6 +4,12 @@
   <span *ngFor="let value of targetValues">{{ value }}</span>
 </div>
 
-<app-player-list></app-player-list>
+<div class="game-launcher" *ngIf="!gameLoaded">
+  <app-player-list></app-player-list>
+  <button (click)="launch301Game()" *ngIf="canLaunchGame">Lancer 301</button>
+</div>
 
-<app-input-target (targetValueInputed)="targetValueInput($event)"></app-input-target>
+<div class="game" *ngIf="gameLoaded">
+  <app-game></app-game>
+  <app-input-target></app-input-target>
+</div>

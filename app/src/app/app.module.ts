@@ -7,20 +7,27 @@ import { InputTargetComponent } from './components/input-target/input-target.com
 import { FormsModule } from '@angular/forms';
 import { PlayerListItemComponent } from './components/player-list-item/player-list-item.component';
 import { PlayerListComponent } from './components/player-list/player-list.component';
+import { GameComponent } from './components/game/game.component';
+import { PlayerService } from './services/players.service';
+import { InputTargetService } from './services/input-target.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     InputTargetComponent,
     PlayerListItemComponent,
-    PlayerListComponent
+    PlayerListComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    PlayerService,
+    InputTargetService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

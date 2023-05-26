@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+  targetValues: string[] = [];
+
+  targetValueInput(targetValue: string): void {
+    this.targetValues.push(targetValue);
+  }
 }

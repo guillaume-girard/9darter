@@ -1,0 +1,9 @@
+<div id="input-player-container">
+  <form>
+    <input type="text" [(ngModel)]="playerName" [ngModelOptions]="{standalone: true}" placeholder="Ajouter un joueur" />
+    <button type="submit" (click)="onSubmitNewPlayer()">OK</button>
+  </form>
+  <div class="player-list">
+    <app-player-list-item *ngFor="let player of players" [player]="player" (deletePlayer)="removePlayer($event)"></app-player-list-item>
+  </div>
+</div>

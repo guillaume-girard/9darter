@@ -1,3 +1,9 @@
 <h1>9darter V2</h1>
 
-<router-outlet></router-outlet>
+<div class="target-values">
+  <span *ngFor="let value of targetValues">{{ value }}</span>
+</div>
+
+<app-player-list></app-player-list>
+
+<app-input-target (targetValueInputed)="targetValueInput($event)"></app-input-target>

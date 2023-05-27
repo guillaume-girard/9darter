@@ -22,8 +22,9 @@ export class PlayerListComponent {
   }
 
   onSubmitNewPlayer(): void {
-    if (this.playerName.length > 0) {
-      this.playerService.addPlayer(this.playerName);
+    let trimName = this.playerName.trim();
+    if (trimName.length > 0) {
+      this.playerService.addPlayer(trimName);
       this.playerName = '';
     }
   }

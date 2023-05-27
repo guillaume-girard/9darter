@@ -7,7 +7,7 @@ import { InputTargetComponent } from './components/input-target/input-target.com
 import { FormsModule } from '@angular/forms';
 import { PlayerListItemComponent } from './components/player-list-item/player-list-item.component';
 import { PlayerListComponent } from './components/player-list/player-list.component';
-import { GameComponent } from './components/game/game.component';
+import { GameX01Component } from './components/gameX01/gameX01.component';
 import { PlayerService } from './services/players.service';
 import { InputTargetService } from './services/input-target.service';
 
@@ -17,7 +17,7 @@ import { InputTargetService } from './services/input-target.service';
     InputTargetComponent,
     PlayerListItemComponent,
     PlayerListComponent,
-    GameComponent
+    GameX01Component
   ],
   imports: [
     BrowserModule,

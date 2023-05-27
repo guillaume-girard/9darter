@@ -1,1 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+/* BUST et VANGERWEN */
+.grosvangerwen,
+.spanbust {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0px;
+  height: 0px;
+}
+
+@keyframes vangerwen {
+  from {
+    width: 0%;
+    height: 0%;
+  }
+
+  to {
+    width: 300%;
+    height: 300%;
+  }
+}
+
+.grosvangerwen {
+  animation: vangerwen 1s ease-out;
+}
+
+@keyframes bust {
+  0% {
+    z-index: 1000;
+    opacity: 1;
+    transform:
+      translate(-50%, -50%) rotate(0deg);
+  }
+
+  25% {
+    transform:
+      translate(-50%, -50%) rotate(33deg);
+  }
+
+  50% {
+    transform:
+      translate(-50%, -50%) rotate(0deg);
+  }
+
+  75% {
+    transform:
+      translate(-50%, -50%) rotate(-33deg);
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%) rotate(0deg);
+    opacity: 1;
+    z-index: 1000;
+  }
+}
+
+.spanbust {
+  z-index: -1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  font-size: 100px;
+  font-weight: bold;
+  opacity: 0;
+  animation: bust .15s 5 linear;
+}

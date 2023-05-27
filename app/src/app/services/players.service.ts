@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Player } from "../models/player.model";
 import { Subject } from "rxjs";
+import { X01Player } from "../models/x01player.model";
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +31,15 @@ export class PlayerService {
 
   public getPlayers(): Player[] {
     return this.players;
+  }
+
+  public getPlayersForX01Game(startScore: number): X01Player[] {
+    let x01Players: X01Player[] = [];
+
+    for (let i = 0; i < this.players.length; i++) {
+      x01Players[i] = new X01Player(this.players[i], startScore);
+    }
+
+    return x01Players;
   }
 }

@@ -3,4 +3,5 @@
     <input type="text" [(ngModel)]="targetValue" [ngModelOptions]="{standalone: true}" />
     <button type="submit">OK</button>
   </form>
+  <button [disabled]="!enableNextPlayerButton" (click)="onNextPlayer()">Next Player</button>
 </div>

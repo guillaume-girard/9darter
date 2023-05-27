@@ -11,24 +11,24 @@ import { InputTargetService } from 'src/app/services/input-target.service';
 export class InputTargetComponent implements OnInit {
   validTargetValues: string[] = [];
   targetValue: string = '';
+  enableNextPlayerButton = true;
 
-  constructor(private service: InputTargetService) {
-    for (let i = 1; i <= 20; i++) {
-      for (let prefix of ['', 'd', 't']) {
-        this.validTargetValues.push(prefix + i);
-      }
-    }
-    this.validTargetValues.push('b', 'db', 'n');
-  }
+  constructor(private inputTargetService: InputTargetService) { }
   
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.inputTargetService.enableNextPlayerButton.subscribe((value) => this.enableNextPlayerButton = value);
+  }
 
   onSubmitTarget(): void {
-    if (this.validTargetValues.includes(this.targetValue)) {
-      this.service.inputTarget(this.targetValue)
-    } else {
-      console.error('Invalid target value: ' + this.targetValue);
+    try {
+      this.inputTargetService.inputTarget(this.targetValue);
+      this.targetValue = '';
+    } catch (error) {
+      console.error(error);
     }
-    this.targetValue = '';
+  }
+  
+  onNextPlayer(): void {
+    this.inputTargetService.emitNextPlayer();
   }
 }

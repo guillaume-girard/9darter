@@ -1,0 +1,10 @@
+<div id="scoreprint">
+
+  <div *ngFor="let player of players" [ngClass]="{'current': player === currentPlayer, 'finished': player.finished}" class="scoreline">
+    <h2>{{ player.name }}</h2>
+    <span *ngIf="player.suggestion" class='suggestion'>{{ player.suggestionComputed }}</span>
+    <span class='score'>{{ player.rank !== null ? player.rankComputed : player.score }}</span>
+    <div class='average'>Average : <span>{{ player.average }}</span></div>
+  </div>
+
+</div>

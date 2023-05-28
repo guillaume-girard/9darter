@@ -1,3 +1,39 @@
-* {
-  box-sizing: border-box;
+header {
+  background-color: rgb(80, 60, 90);
+  color: whitesmoke;
+  padding: 10px;
+
+  h1 {
+    margin: 0;
+    text-align: center;
+  }
+}
+
+main {
+  width: 100%;
+  flex: 2;
+
+  .game-launcher {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    & > * {
+      display: block;
+      height: 100%;
+      background: linear-gradient(to right, #eee, #888);
+      border-radius: 0px 15px 15px 0px;
+      border-color: #555;
+      border-width: 3px 3px 3px 0;
+      border-style: solid;
+    }
+
+    app-player-list {
+      flex: 1;
+    }
+
+    app-game-selector {
+      flex: 2;
+    }
+  }
 }

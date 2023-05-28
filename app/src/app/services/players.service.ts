@@ -11,10 +11,8 @@ export class PlayerService {
   private lastPlayerId = 0;
   nbPlayersChange: Subject<number> = new Subject<number>();
 
-  constructor(){ }
-
   public addPlayer(playerName: string): void {
-    let newPlayer: Player = { id: this.lastPlayerId++, name: playerName };
+    let newPlayer: Player = { id: this.lastPlayerId++, name: playerName, order: this.players.length + 1 };
     this.players.push(newPlayer);
     this.nbPlayersChange.next(this.players.length);
   }
@@ -25,6 +23,11 @@ export class PlayerService {
     if (playerToRemove) {
       let playerIndexToRemove = this.players.indexOf(playerToRemove);
       this.players.splice(playerIndexToRemove, 1);
+
+      for (let i = playerIndexToRemove; i < this.players.length; i++) {
+        this.players[i].order--;
+      }
+      
       this.nbPlayersChange.next(this.players.length);
     }
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, map, tap } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { Observable, map, tap } from 'rxjs';
 })
 export class GameSelectorComponent {
   @Output() launchGame = new EventEmitter<string>();
+  @Input() canLaunchGame: boolean = false;
   mainForm: FormGroup;
   gameMode: FormControl;
   isDoubleOut: FormControl;

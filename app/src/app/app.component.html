@@ -1,11 +1,14 @@
 <h1>9darter V2</h1>
+<div class="top-button" *ngIf="gameLoaded">
+  <button (click)="showGameLoader()">Nouveau jeu</button>
+</div>
 
 <div class="game-launcher" *ngIf="!gameLoaded">
   <app-player-list></app-player-list>
-  <button (click)="launch301Game()" *ngIf="canLaunchGame">Lancer 301</button>
+  <app-game-selector *ngIf="canLaunchGame" (launchGame)="launchGame($event)"></app-game-selector>
 </div>
 
 <div class="game" *ngIf="gameLoaded">
-  <app-gameX01></app-gameX01>
+  <app-gameX01 [gameOptions]="gameOptions"></app-gameX01>
   <app-input-target></app-input-target>
 </div>

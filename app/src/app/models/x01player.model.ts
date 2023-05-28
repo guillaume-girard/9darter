@@ -6,9 +6,10 @@ export class X01Player implements PlayerInGame {
   score: number;
   average: number;
   nbVolleys: number;
-  nbDarts: number;
+  nbDarts: number; // utilisé pour le cigare
   totalpoints: number;
   finished: boolean;
+  legs: number;
   rank: null | number;
   
   constructor(player: Player, startScore: number) {
@@ -20,6 +21,7 @@ export class X01Player implements PlayerInGame {
     this.suggestion = false;
     this.totalpoints = 0;
     this.finished = false;
+    this.legs = 0;
     this.rank = null;
   }
 
@@ -68,5 +70,18 @@ export class X01Player implements PlayerInGame {
       }
     }
     return str;
+  }
+
+  reInitPlayer(startScore: number, keepAverage: boolean = false) {
+    this.score = startScore;
+    if (!keepAverage) {
+      this.average = 0;
+      this.nbVolleys = 0;
+      this.totalpoints = 0;
+    }
+    this.nbDarts = 0;
+    this.suggestion = false;
+    this.finished = false;
+    this.rank = null;
   }
 }

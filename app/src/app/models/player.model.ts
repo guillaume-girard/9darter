@@ -6,5 +6,6 @@ export interface Player {
 export interface PlayerInGame {
   name: string;
   finished: boolean;
+  legs: number;
   rank: null | number;
 }

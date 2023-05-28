@@ -19,7 +19,7 @@ export class InputTargetService {
         this.validTargetValues.push(prefix + i);
       }
     }
-    this.validTargetValues.push('0', 'b', 'db', 'n', 'c');
+    this.validTargetValues.push('0', '25', '50', 'b', 'db', 'n', 'c');
   }
   
   public inputTarget(targetInputed: string): void {

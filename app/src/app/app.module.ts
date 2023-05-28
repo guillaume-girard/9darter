@@ -4,12 +4,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InputTargetComponent } from './components/input-target/input-target.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlayerListItemComponent } from './components/player-list-item/player-list-item.component';
 import { PlayerListComponent } from './components/player-list/player-list.component';
 import { GameX01Component } from './components/gameX01/gameX01.component';
 import { PlayerService } from './services/players.service';
 import { InputTargetService } from './services/input-target.service';
+import { GameSelectorComponent } from './components/game-selector/game-selector.component';
+import { GameComputer } from './models/game-computers/game-computer.model';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { InputTargetService } from './services/input-target.service';
     InputTargetComponent,
     PlayerListItemComponent,
     PlayerListComponent,
-    GameX01Component
+    GameX01Component,
+    GameSelectorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     PlayerService,

@@ -1,10 +1,22 @@
 <div id="scoreprint">
 
-  <div *ngFor="let player of players" [ngClass]="{'current': player === currentPlayer, 'finished': player.finished}" class="scoreline">
+  <div *ngFor="let player of computer.players" [ngClass]="{'current': player === computer.currentPlayer, 'finished': player.finished}" class="scoreline">
     <h2>{{ player.name }}</h2>
     <span *ngIf="player.suggestion" class='suggestion'>{{ player.suggestionComputed }}</span>
     <span class='score'>{{ player.rank !== null ? player.rankComputed : player.score }}</span>
     <div class='average'>Average : <span>{{ player.average }}</span></div>
   </div>
 
+  <!-- <span>Jeu terminé :{{ computer.isGameFinished }}</span> -->
+
+  <div *ngIf="computer.isGameFinished">
+    <button (click)="launchRevenge()">Faire la revenche</button>
+    <ul>
+      <li>Perdant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="LOSER_FIRST" /></li>
+      <li>Gagnant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="WINNER_FIRST" /></li>
+      <li>Ordre aléatoire <input name="revenge-type" type="radio" [formControl]="revengeType" value="RANDOM" /></li>
+      <li>Même ordre <input name="revenge-type" type="radio" [formControl]="revengeType" value="SAME_ORDER" /></li>
+    </ul>
+    Garder les averages <input type="checkbox" [formControl]="keepAverage" />
+  </div>
 </div>

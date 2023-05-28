@@ -1,26 +1,25 @@
-import { Component, OnInit } from "@angular/core";
-import { InputTargetService } from "../services/input-target.service";
-import { PlayerService } from "../services/players.service";
-import { PlayerInGame } from "./player.model";
+import { Injectable, OnInit } from "@angular/core";
+import { PlayerInGame } from "../player.model";
+import { PlayerService } from "src/app/services/players.service";
+import { InputTargetService } from "src/app/services/input-target.service";
 
-@Component({
-  template: ''
-})
-export abstract class GameComputerComponent implements OnInit {
+@Injectable()
+export abstract class GameComputer {
   abstract players: PlayerInGame[];
   abstract currentPlayer: PlayerInGame;
   currentIndex: number;
   currentRank: number;
+  nbLegsToWin: number;
+  isGameFinished: boolean;
 
   constructor(
     protected playerService: PlayerService,
     protected inputTargetService: InputTargetService
   ) {
+    this.isGameFinished = false;
     this.currentIndex = 0;
     this.currentRank = 1;
-  }
-
-  ngOnInit() {
+    this.nbLegsToWin = 1;
     this.inputTargetService.targetInputed.subscribe((value) => { this.createSnapshot; this.addDart(value) });
     this.inputTargetService.nextPlayer.subscribe(() => { this.endCurrentPlayerRound(); this.nextPlayer(); });
     this.inputTargetService.cancel.subscribe(() => this.restoreSnapshot());
@@ -62,6 +61,7 @@ export abstract class GameComputerComponent implements OnInit {
 
   protected currentPlayerHasFinished(): void {
     this.endCurrentPlayerRound();
+
     this.currentPlayer.finished = true;
     this.currentPlayer.rank = this.currentRank++;
 
@@ -69,6 +69,30 @@ export abstract class GameComputerComponent implements OnInit {
       this.finishGame();
     } else {
       this.nextPlayer();
+    }
+  }
+
+  protected setPlayersOrder(sortType: 'LOSER_FIRST' | 'WINNER_FIRST' | 'RANDOM' | 'SAME_ORDER') {
+    switch(sortType) {
+      case 'LOSER_FIRST':
+        this.players.sort((a, b) => {
+          a.rank = a.rank === null ? Infinity : a.rank;
+          b.rank = b.rank === null ? Infinity : b.rank;
+          return b.rank - a.rank
+        })
+        return;
+      case 'WINNER_FIRST':
+        this.players.sort((a, b) => {
+          a.rank = a.rank === null ? Infinity : a.rank;
+          b.rank = b.rank === null ? Infinity : b.rank;
+          return a.rank - b.rank
+        })
+        return;
+      case 'RANDOM':
+        this.players.sort(() => Math.random() - Math.random());
+        return;
+      case 'SAME_ORDER':
+        return;
     }
   }
 }

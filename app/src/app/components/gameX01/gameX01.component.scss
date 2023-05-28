@@ -13,23 +13,27 @@
   position: relative;
 }
 
-#scoreprint .current h2 {
-  font-weight: bold;
-  padding-left: 15px;
-}
+#scoreprint .current:not(.finished) {
+  background-color: rgb(180, 180, 180);
 
-#scoreprint .current h2::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 7.5px 0 7.5px 10px;
-  border-color: transparent transparent transparent #ff0000;
+  h2 {
+    font-weight: bold;
+    padding-left: 15px;
+
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7.5px 0 7.5px 10px;
+      border-color: transparent transparent transparent #ff0000;
+    }
+  }
 }
 
 #scoreprint span {
@@ -61,10 +65,6 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-}
-
-#scoreprint div.scoreline.current {
-  background-color: rgb(180, 180, 180);
 }
 
 #scoreprint div.scoreline.finished {

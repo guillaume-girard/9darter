@@ -29,6 +29,10 @@ export abstract class GameComputer {
 
   protected abstract restoreSnapshot(): void;
 
+  protected abstract initGame(...args: any): void;
+
+  protected abstract reInitGame(...args: any): void;
+
   protected abstract addDart(value: string): void;
 
   protected abstract finishGame(): void;

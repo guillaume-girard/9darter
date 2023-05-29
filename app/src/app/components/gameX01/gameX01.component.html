@@ -7,8 +7,6 @@
     <div class='average'>Average : <span>{{ player.average }}</span></div>
   </div>
 
-  <!-- <span>Jeu terminé :{{ computer.isGameFinished }}</span> -->
-
   <div *ngIf="computer.isGameFinished">
     <button (click)="launchRevenge()">Faire la revenche</button>
     <ul>

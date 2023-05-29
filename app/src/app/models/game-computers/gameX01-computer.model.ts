@@ -2,7 +2,6 @@ import { PlayerService } from "src/app/services/players.service";
 import { X01Player } from "../x01player.model";
 import { GameComputer } from "./game-computer.model";
 import { InputTargetService } from "src/app/services/input-target.service";
-import { GameX01Options } from "../games-options.model";
 
 export class GameX01Computer extends GameComputer {
   gameType!: string;
@@ -248,10 +247,10 @@ export class GameX01Computer extends GameComputer {
   }
 
   createSnapshot(): void {
-    console.warn('method createSnapshot does not exist in GameComputerComponent')
+    console.warn('method createSnapshot does not exist in GameComputerComponent');
   }
   
   restoreSnapshot(): void {
-    console.warn('method restoreSnapshot does not exist in GameComputerComponent')
+    console.warn('method restoreSnapshot does not exist in GameComputerComponent');
   }
 }

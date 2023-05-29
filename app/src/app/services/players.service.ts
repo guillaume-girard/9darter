@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Player } from "../models/player.model";
 import { Subject } from "rxjs";
 import { X01Player } from "../models/x01player.model";
+import { CricketPlayer } from "../models/cricket-player.model";
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,15 @@ export class PlayerService {
     }
 
     return x01Players;
+  }
+
+  getPlayersForCricketGame(targets: string[]): CricketPlayer[] {
+    let cricketPlayers: CricketPlayer[] = [];
+
+    for (let i = 0; i < this.players.length; i++) {
+      cricketPlayers[i] = new CricketPlayer(this.players[i], targets);
+    }
+
+    return cricketPlayers;
   }
 }

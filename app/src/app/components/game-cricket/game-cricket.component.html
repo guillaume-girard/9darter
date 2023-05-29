@@ -1,0 +1,36 @@
+<div id="scoreprint">
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th *ngFor="let player of computer.players" [ngClass]="{current: player === computer.currentPlayer}">{{ player.name }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let target of computer.targets">
+        <th>{{ target }}</th>
+        <td *ngFor="let player of computer.players">
+          <span *ngIf="player.getTargetState(target) > 0" class="bar bar-one"></span>
+          <span *ngIf="player.getTargetState(target) > 1" class="bar bar-two"></span>
+          <span *ngIf="player.getTargetState(target) > 2" class="bar bar-open"></span>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Score</th>
+        <td *ngFor="let player of computer.players">{{ player.score }}{{ player.finished ? " (" + player.rankComputed + ")" : ""}}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div *ngIf="computer.isGameFinished">
+    <button (click)="launchRevenge()">Faire la revenche</button>
+    <ul>
+      <li>Perdant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="LOSER_FIRST" /></li>
+      <li>Gagnant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="WINNER_FIRST" /></li>
+      <li>Ordre aléatoire <input name="revenge-type" type="radio" [formControl]="revengeType" value="RANDOM" /></li>
+      <li>Même ordre <input name="revenge-type" type="radio" [formControl]="revengeType" value="SAME_ORDER" /></li>
+    </ul>
+  </div>
+</div>

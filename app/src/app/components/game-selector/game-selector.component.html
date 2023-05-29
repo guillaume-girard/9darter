@@ -19,6 +19,8 @@
       </div>
       <div class="game-cricket-options" *ngIf="showCricketOptionsCtrl">
         cricket options <hr />
+        Reverse <input type="checkbox" [formControl]="isReverseCricket" />
+        Crazy <input type="checkbox" [formControl]="isCrazyCricket" />
         Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
       </div>
     </div>

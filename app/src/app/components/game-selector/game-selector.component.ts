@@ -13,6 +13,8 @@ export class GameSelectorComponent {
   mainForm: FormGroup;
   gameMode: FormControl;
   isDoubleOut: FormControl;
+  isReverseCricket: FormControl;
+  isCrazyCricket: FormControl;
   nbLegsToWin: FormControl;
 
   showOptionsCtrl$: Observable<boolean>;
@@ -22,7 +24,9 @@ export class GameSelectorComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.gameMode = this.formBuilder.control('', Validators.required);
-    this.isDoubleOut = this.formBuilder.control('');
+    this.isDoubleOut = this.formBuilder.control(false);
+    this.isReverseCricket = this.formBuilder.control(false);
+    this.isCrazyCricket = this.formBuilder.control(false);
     this.nbLegsToWin = this.formBuilder.control(1);
 
     this.showOptionsCtrl$ = this.gameMode.valueChanges.pipe(
@@ -55,11 +59,14 @@ export class GameSelectorComponent {
     this.mainForm = this.formBuilder.group({
       gameMode: this.gameMode,
       isDoubleOut: this.isDoubleOut,
+      isReverseCricket: this.isReverseCricket,
+      isCrazyCricket: this.isCrazyCricket,
       nbLegsToWin: this.nbLegsToWin
     });
   }
 
   onSubmitGameForm() {
+    console.log(this.mainForm.value);
     this.launchGame.emit(this.mainForm.value);
   }
 }

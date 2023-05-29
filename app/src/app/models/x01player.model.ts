@@ -55,7 +55,6 @@ export class X01Player implements PlayerInGame {
         suffix = "th";
     }
 
-    
     return this.rank + suffix;
   }
 

@@ -8,4 +8,5 @@ export interface GameCricketOptions {
   isReverse: boolean;
   isCrazy: boolean;
   isWild: boolean;
+  nbLegsToWin: number;
 }

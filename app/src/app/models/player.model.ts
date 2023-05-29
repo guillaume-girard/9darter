@@ -9,4 +9,6 @@ export interface PlayerInGame {
   finished: boolean;
   legs: number;
   rank: null | number;
+
+  reInitPlayer(...args: any): void;
 }

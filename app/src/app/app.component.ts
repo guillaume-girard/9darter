@@ -10,6 +10,8 @@ import { GameX01Options } from './models/games-options.model';
 export class AppComponent {
   gameOptions: any;
   gameLoaded = false;
+  isX01Launched = false;
+  isCricketLaunched = false;
   canLaunchGame = false;
 
   constructor(private playerService: PlayerService) {}
@@ -19,34 +21,41 @@ export class AppComponent {
   }
 
   launchGame(gameOptions: any) {
+    console.log(gameOptions);
+    this.isX01Launched = false;
+    this.isCricketLaunched = false;
     switch(gameOptions.gameMode) {
       case '301': 
         this.launch301Game(gameOptions.isDoubleOut, gameOptions.nbLegsToWin);
-        return;
+        break;
       case '501': 
         this.launch501Game(gameOptions.isDoubleOut, gameOptions.nbLegsToWin);
-        return;
+        break;
       case 'cricket': 
-        this.launchCricketGame(gameOptions.nbLegsToWin);
-        return;
+        this.launchCricketGame(gameOptions.isReverseCricket, gameOptions.isCrazyCricket, gameOptions.nbLegsToWin);
+        break;
       default: 
         this.launch301Game(gameOptions.isDoubleOut, gameOptions.nbLegsToWin);
-        return;
+        break;
     }
   }
   
   launch301Game(isDoubleOut: boolean, nbLegsToWin: number) {
     this.gameOptions = {gameType: '301', isDoubleOut: isDoubleOut, nbLegsToWin: nbLegsToWin};
     this.gameLoaded = true;
+    this.isX01Launched = true;
   }
   
   launch501Game(isDoubleOut: boolean, nbLegsToWin: number) {
     this.gameOptions = {gameType: '501', isDoubleOut: isDoubleOut, nbLegsToWin: nbLegsToWin};
     this.gameLoaded = true;
+    this.isX01Launched = true;
   }
-
-  launchCricketGame(nbLegsToWin: number) {
-    console.log("lancer le cricket");
+  
+  launchCricketGame(isReverse: boolean, isCrazy: boolean, nbLegsToWin: number) {
+    this.gameOptions = {isReverse: isReverse, isCrazy: isCrazy, nbLegsToWin: nbLegsToWin};
+    this.gameLoaded = true;
+    this.isCricketLaunched = true;
   }
 
   showGameLoader() {

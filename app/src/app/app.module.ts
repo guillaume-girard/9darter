@@ -12,6 +12,7 @@ import { PlayerService } from './services/players.service';
 import { InputTargetService } from './services/input-target.service';
 import { GameSelectorComponent } from './components/game-selector/game-selector.component';
 import { GameComputer } from './models/game-computers/game-computer.model';
+import { GameCricketComponent } from './components/game-cricket/game-cricket.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { GameComputer } from './models/game-computers/game-computer.model';
     PlayerListItemComponent,
     PlayerListComponent,
     GameX01Component,
-    GameSelectorComponent
+    GameSelectorComponent,
+    GameCricketComponent
   ],
   imports: [
     BrowserModule,

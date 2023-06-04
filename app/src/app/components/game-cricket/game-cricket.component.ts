@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormBuilder } from '@angular/forms';
 import { GameCricketComputer } from 'src/app/models/game-computers/game-cricket-computer.model';
 import { GameCricketOptions } from 'src/app/models/games-options.model';
@@ -11,7 +11,7 @@ import { LOAD_GAME_STATE, environment } from 'src/environments/environment.devel
   templateUrl: './game-cricket.component.html',
   styleUrls: ['./game-cricket.component.scss']
 })
-export class GameCricketComponent {
+export class GameCricketComponent implements OnInit {
   computer: GameCricketComputer;
   revengeType: FormControl;
   @Input() gameOptions!: GameCricketOptions;
@@ -28,9 +28,22 @@ export class GameCricketComponent {
   ngOnInit(): void {
     this.computer.initGame(this.gameOptions.isReverse, this.gameOptions.isCrazy, this.gameOptions.nbLegsToWin);
 
+    // Only for development 
     if (environment.loadGameState === LOAD_GAME_STATE.FINISH) {
       this.computer.finishGame();
     }
+  }
+
+  get gameTitle(): string {
+    let str = "";
+    if (this.gameOptions.isReverse)
+      str += "Reverse ";
+    if (this.gameOptions.isCrazy)
+      str += "Crazy ";
+    str += "Cricket"
+    if (this.gameOptions.nbLegsToWin > 1)
+      str += ", " + this.gameOptions.nbLegsToWin + " legs gagnantes";
+    return str;
   }
 
   launchRevenge() {

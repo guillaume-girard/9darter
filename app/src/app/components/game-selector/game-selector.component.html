@@ -1,4 +1,6 @@
 <div id="game-selector-container">
+  <h2>Sélection du jeu</h2>
+
   <form [formGroup]="mainForm" (ngSubmit)="onSubmitGameForm()">
     <div class="radio-games">
       <input id="radio-game301" type="radio" value="301" [formControl]="gameMode" /><label for="radio-game301">301</label>
@@ -8,17 +10,14 @@
 
     <div class="game-options" *ngIf="showOptionsCtrl$ | async">
       <div class="game-301-options" *ngIf="show301OptionsCtrl">
-        301 options <hr />
         Double-out <input type="checkbox" [formControl]="isDoubleOut" />
         Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
       </div>
       <div class="game-501-options" *ngIf="show501OptionsCtrl">
-        501 options <hr />
         Double-out <input type="checkbox" [formControl]="isDoubleOut" />
         Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
       </div>
       <div class="game-cricket-options" *ngIf="showCricketOptionsCtrl">
-        cricket options <hr />
         Reverse <input type="checkbox" [formControl]="isReverseCricket" />
         Crazy <input type="checkbox" [formControl]="isCrazyCricket" />
         Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />

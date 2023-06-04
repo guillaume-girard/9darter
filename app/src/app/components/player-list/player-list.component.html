@@ -1,5 +1,6 @@
 <div id="input-player-container">
   <h2>Sélection des joueurs</h2>
+  
   <form>
     <input id="input-name" type="text" [(ngModel)]="playerName" [ngModelOptions]="{standalone: true}" placeholder="Ajouter un joueur" />
     <button type="submit" (click)="onSubmitNewPlayer()">OK</button>

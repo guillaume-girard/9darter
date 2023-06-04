@@ -1,3 +1,5 @@
+<h2>{{ gameTitle }}</h2>
+
 <div id="scoreprint">
 
   <div *ngFor="let player of computer.players" [ngClass]="{'current': player === computer.currentPlayer, 'finished': player.finished}" class="scoreline">

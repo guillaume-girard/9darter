@@ -17,7 +17,7 @@ export const environment = {
   production: false,
   loadDebug: true,
   loadNbPlayers: 4,
-  loadGame: GAME_REVERSE_CRICKET,
+  loadGame: null,
   loadGameState: LOAD_GAME_STATE.START
 };
 

@@ -35,6 +35,15 @@ export class GameX01Component implements OnInit {
     }
   }
 
+  get gameTitle(): string {
+    let str = this.gameOptions.gameType;
+    if (this.gameOptions.isDoubleOut)
+      str += " Double Out";
+    if (this.gameOptions.nbLegsToWin > 1)
+      str += ", " + this.gameOptions.nbLegsToWin + " legs gagnantes";
+    return str;
+  }
+
   launchRevenge() {
     this.computer.reInitGame(this.revengeType.value, this.keepAverage.value);
   }

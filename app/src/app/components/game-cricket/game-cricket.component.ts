@@ -4,6 +4,7 @@ import { GameCricketComputer } from 'src/app/models/game-computers/game-cricket-
 import { GameCricketOptions } from 'src/app/models/games-options.model';
 import { InputTargetService } from 'src/app/services/input-target.service';
 import { PlayerService } from 'src/app/services/players.service';
+import { LOAD_GAME_STATE, environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-game-cricket',
@@ -26,6 +27,10 @@ export class GameCricketComponent {
 
   ngOnInit(): void {
     this.computer.initGame(this.gameOptions.isReverse, this.gameOptions.isCrazy, this.gameOptions.nbLegsToWin);
+
+    if (environment.loadGameState === LOAD_GAME_STATE.FINISH) {
+      this.computer.finishGame();
+    }
   }
 
   launchRevenge() {

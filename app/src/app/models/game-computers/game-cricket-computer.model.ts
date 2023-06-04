@@ -176,7 +176,7 @@ export class GameCricketComputer extends GameComputer {
     }
   }
 
-  protected override finishGame(): void {
+  override finishGame(): void {
     this.isGameFinished = true;
     this.players.forEach((player) => {
       if (player.rank === null) {
@@ -202,7 +202,7 @@ export class GameCricketComputer extends GameComputer {
     } else {
       arrNumber = [20, 19, 18, 17, 16, 15];
     }
-    let arr: string[] = arrNumber.map((value) => "" + value);
+    let arr: string[] = arrNumber.map((value) => value.toString());
     arr.push("Bull's eye");
     return arr;
   }

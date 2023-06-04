@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { PlayerService } from './services/players.service';
 import { GameX01Options } from './models/games-options.model';
+import { DebugService } from './services/debug.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-root',
@@ -14,14 +16,17 @@ export class AppComponent {
   isCricketLaunched = false;
   canLaunchGame = false;
 
-  constructor(private playerService: PlayerService) {}
+  constructor(private playerService: PlayerService, private debugService: DebugService) {}
   
   ngOnInit(): void {
     this.playerService.nbPlayersChange.subscribe((value) => this.canLaunchGame = value > 0);
+
+    if (environment.loadDebug) {
+      this.debugService.loadState(this);
+    }
   }
 
   launchGame(gameOptions: any) {
-    console.log(gameOptions);
     this.isX01Launched = false;
     this.isCricketLaunched = false;
     switch(gameOptions.gameMode) {

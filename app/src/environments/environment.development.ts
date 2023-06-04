@@ -17,7 +17,12 @@ export const environment = {
   production: false,
   loadDebug: true,
   loadNbPlayers: 4,
+<<<<<<< HEAD
   loadGame: GAME_301,
   loadGameState: LOAD_GAME_STATE.START
+=======
+  loadGame: null,
+  loadGameState: LOAD_GAME_STATE.FINISH
+>>>>>>> b0bd0f2b1def1bb98156ecc8396249001b59dbf5
 };
 

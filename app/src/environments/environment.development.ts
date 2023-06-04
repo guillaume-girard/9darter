@@ -3,7 +3,7 @@ const GAME_301_DOUBLEOUT = { gameMode: '301', isDoubleOut: true, nbLegsToWin: 1 
 const GAME_501 = { gameMode: '501', isDoubleOut: false, nbLegsToWin: 1 };
 const GAME_501_DOUBLEOUT = { gameMode: '501', isDoubleOut: true, nbLegsToWin: 1 };
 const GAME_CRICKET = { gameMode: 'cricket', isReverse: false, isCrazy: false, nbLegsToWin: 1 };
-const GAME_REVERSE_CRICKET = { gameMode: 'cricket', isReverse: true, isCrazy: false, nbLegsToWin: 1 };
+const GAME_REVERSE_CRICKET = { gameMode: 'cricket', isReverseCricket: true, isCrazyCricket: false, nbLegsToWin: 1 };
 const GAME_CRAZY_CRICKET = { gameMode: 'cricket', isReverse: false, isCrazy: true, nbLegsToWin: 1 };
 const GAME_REVERSE_CRAZY_CRICKET = { gameMode: 'cricket', isReverse: true, isCrazy: true, nbLegsToWin: 1 };
 
@@ -17,12 +17,7 @@ export const environment = {
   production: false,
   loadDebug: true,
   loadNbPlayers: 4,
-<<<<<<< HEAD
-  loadGame: GAME_301,
+  loadGame: GAME_REVERSE_CRICKET,
   loadGameState: LOAD_GAME_STATE.START
-=======
-  loadGame: null,
-  loadGameState: LOAD_GAME_STATE.FINISH
->>>>>>> b0bd0f2b1def1bb98156ecc8396249001b59dbf5
 };
 

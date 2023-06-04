@@ -47,70 +47,70 @@ export class GameCricketComputer extends GameComputer {
     this.isGameFinished = false;
   }
 
-  protected override createSnapshot(): void {
-    console.warn('method createSnapshot does not exist in GameCricketComputer');
-  }
-  protected override restoreSnapshot(): void {
-    console.warn('method restoreSnapshot does not exist in GameCricketComputer');
-  }
-
   protected override addDart(value: string): void {
-      this.nbDartsLeftToCurrentPlayer--;
+    this.nbDartsLeftToCurrentPlayer--;
 
-      let firstChar = (value.slice(0, 1)).toLowerCase();
-      let multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
-      value = multiplyBy > 1 ? value.slice(1) : value;
-      let targetValue: string = value === "b" ? "Bull's eye" : value;
+    let firstChar = (value.slice(0, 1)).toLowerCase();
+    let multiplyBy = firstChar === "d" ? 2 : (firstChar === "t" ? 3 : 1);
+    value = multiplyBy > 1 ? value.slice(1) : value;
+    let targetValue: string = value === "b" ? "Bull's eye" : value;
 
-      // van gerwen
-      // if (value === 20 && multiplyBy === 3) {
-      //   // van gerwen grosse gueule
-      //   var imgvangerwen = document.createElement('img');
-      //   imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
-      //   imgvangerwen.className = "grosvangerwen";
-      //   document.body.appendChild(imgvangerwen);
-      // }
+    // van gerwen
+    // if (value === 20 && multiplyBy === 3) {
+    //   // van gerwen grosse gueule
+    //   var imgvangerwen = document.createElement('img');
+    //   imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
+    //   imgvangerwen.className = "grosvangerwen";
+    //   document.body.appendChild(imgvangerwen);
+    // }
 
-      if (this.targets.indexOf(targetValue) >= 0) {
-        this.score(multiplyBy, targetValue);
+    if (this.targets.indexOf(targetValue) >= 0) {
+      this.score(multiplyBy, targetValue);
+
+      // Est-ce que le joueur a fini
+      if (this.currentPlayer.targetsState.every((el) => el.state === 3)) {
+        let playerScore = this.currentPlayer.score;
+        if (this.players.every((el) => {
+          if (!this.isReverse) {
+            return (el === this.currentPlayer || el.finished || el.score <= playerScore);
+          } else {
+            return (el === this.currentPlayer || el.finished || el.score >= playerScore);
+          }
+        })) {
+          this.playerHasFinished();
+        }
       }
+    }
 
-      if (this.currentPlayer.finished) {
-        this.currentPlayer.rank = this.currentRank++;
-      }
-      // verify if any player has finished
-      var recommence = false;
-      do {
-        recommence = false;
-        for (var i = 0; i < this.nbPlayers; i++) {
-          let pl = this.players[i];
-          let allOpened = pl.targetsState.every((el) => el.state === 3);
+    // Vérifie si ça fait finir d'autres joueurs
+    var recommence = false;
+    do {
+      recommence = false;
+      for (var i = 0; i < this.nbPlayers; i++) {
+        let pl = this.players[i];
 
-          if (allOpened && !pl.finished) {
-            pl.finished = this.players.every((el) => {
-              let returnValue = null;
-              if (!this.isReverse) {
-                returnValue = (el === pl || el.finished || el.score <= pl.score);
-              } else {
-                returnValue = (el === pl || el.finished || el.score >= pl.score);
-              }
-              return returnValue;
-            });
-            if (pl.finished) {
-              pl.rank = this.currentRank++;
-              recommence = true;
+        if (!pl.finished && pl.targetsState.every((el) => el.state === 3)) {
+          if(this.players.every((el) => {
+            if (!this.isReverse) {
+              return (el === pl || el.finished || el.score <= pl.score);
+            } else {
+              return (el === pl || el.finished || el.score >= pl.score);
             }
+          })) {
+            this.playerHasFinished(pl);
+            recommence = true;
           }
         }
-      } while (recommence)
-
-      if (this.currentPlayer.finished) {
-        if (!this.players.every((el) => el.finished)) {
-          this.nextPlayer();
-        } else {
-          this.finishGame();
-        }
       }
+    } while (recommence)
+
+    if (this.currentPlayer.finished) {
+      if (!this.players.every((el) => el.finished)) {
+        this.nextPlayer();
+      } else {
+        this.finishGame();
+      }
+    }
   }
 
   private score(multiple: number, target: string) {
@@ -159,21 +159,6 @@ export class GameCricketComputer extends GameComputer {
       }
       i++;
     } while (i < multiple);
-
-    // Est-ce que le joueur a fini
-    let allOpened = this.currentPlayer.targetsState.every((el) => el.state === 3);
-    if (allOpened) {
-      let playerScore = this.currentPlayer.score;
-      this.currentPlayer.finished = this.players.every((el) => {
-        let returnValue = null;
-        if (!this.isReverse) {
-          returnValue = (el === this.currentPlayer || el.finished || el.score <= playerScore);
-        } else {
-          returnValue = (el === this.currentPlayer || el.finished || el.score >= playerScore);
-        }
-        return returnValue;
-      });
-    }
   }
 
   override finishGame(): void {
@@ -205,5 +190,37 @@ export class GameCricketComputer extends GameComputer {
     let arr: string[] = arrNumber.map((value) => value.toString());
     arr.push("Bull's eye");
     return arr;
+  }
+
+  protected override createSnapshot(): void {
+    let snapshot = {
+      "players": structuredClone(this.players),
+      "currentRank": this.currentRank,
+      "currentIndex": this.currentIndex,
+      "targetsClosed": JSON.parse(JSON.stringify(this.targetsClosed)),
+      "nbDartsLeftToCurrentPlayer": this.nbDartsLeftToCurrentPlayer,
+      "isGameFinished": this.isGameFinished
+    };
+
+    this.snapshots.push(snapshot);
+  }
+  protected override restoreSnapshot(): void {
+    if (this.snapshots.length > 0) {
+      var snapshot = this.snapshots.pop();
+
+      this.players = snapshot.players;
+      // Set du prototype pour que les méthodes de CricketPlayer soient utilisables
+      // @TODO y'a sans doute mieux à faire... 
+      const proto = Object.getPrototypeOf(new CricketPlayer({ id: 0, name: "", order: 0 }, []));
+      this.players.forEach((el) => Object.setPrototypeOf(el, proto));
+
+      this.currentRank = snapshot.currentRank;
+      this.currentIndex = snapshot.currentIndex;
+      this.currentPlayer = this.players[this.currentIndex];
+      this.targetsClosed = snapshot.targetsClosed;
+      this.nbDartsLeftToCurrentPlayer = snapshot.nbDartsLeftToCurrentPlayer;
+
+      this.isGameFinished = snapshot.isGameFinished;
+    }
   }
 }

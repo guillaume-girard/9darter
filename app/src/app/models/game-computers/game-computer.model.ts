@@ -11,6 +11,7 @@ export abstract class GameComputer {
   currentRank: number;
   nbLegsToWin: number;
   isGameFinished: boolean;
+  protected snapshots: any[];
 
   constructor(
     protected playerService: PlayerService,
@@ -20,8 +21,9 @@ export abstract class GameComputer {
     this.currentIndex = 0;
     this.currentRank = 1;
     this.nbLegsToWin = 1;
-    this.inputTargetService.targetInputed.subscribe((value) => { this.createSnapshot; this.addDart(value) });
-    this.inputTargetService.nextPlayer.subscribe(() => { this.endCurrentPlayerRound(); this.nextPlayer(); });
+    this.snapshots = [];
+    this.inputTargetService.targetInputed.subscribe((value) => { this.createSnapshot(); this.addDart(value) });
+    this.inputTargetService.nextPlayer.subscribe(() => { this.endPlayerRound(); this.nextPlayer(); });
     this.inputTargetService.cancel.subscribe(() => this.restoreSnapshot());
   }
 
@@ -41,7 +43,7 @@ export abstract class GameComputer {
     return;
   }
 
-  protected endCurrentPlayerRound(): void {
+  protected endPlayerRound(player: PlayerInGame = this.currentPlayer): void {
     return;
   }
 
@@ -63,12 +65,12 @@ export abstract class GameComputer {
     return;
   }
 
-  protected currentPlayerHasFinished(): void {
-    this.endCurrentPlayerRound();
-
-    this.currentPlayer.finished = true;
-    this.currentPlayer.rank = this.currentRank++;
-
+  protected playerHasFinished(player: PlayerInGame = this.currentPlayer): void {
+    this.endPlayerRound(player);
+    
+    player.finished = true;
+    player.rank = this.currentRank++;
+    
     if (this.currentRank === this.players.length) {
       this.finishGame();
     } else {

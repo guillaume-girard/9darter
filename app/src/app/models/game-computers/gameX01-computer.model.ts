@@ -81,10 +81,10 @@ export class GameX01Computer extends GameComputer {
         document.body.appendChild(spanBust);
 
         this.currentPlayer.score = this.currentPlayerScoreAtFirst;
-        this.endCurrentPlayerRound();
+        this.endPlayerRound();
         this.nextPlayer();
       } else if (this.currentPlayer.score === 0) {
-        this.currentPlayerHasFinished(); // le next player est dedans
+        this.playerHasFinished(); // le next player est dedans
       }
     } else {
 
@@ -161,7 +161,7 @@ export class GameX01Computer extends GameComputer {
     this.nbDartsLeftToCurrentPlayer = 3;
   }
 
-  override endCurrentPlayerRound() {
+  override endPlayerRound() {
     this.currentPlayer.nbVolleys++;
     this.currentPlayer.computeAverage();
     this.currentPlayer.suggestion = this.findSuggestedFinish(this.currentPlayer.score, 3);
@@ -247,10 +247,35 @@ export class GameX01Computer extends GameComputer {
   }
 
   createSnapshot(): void {
-    console.warn('method createSnapshot does not exist in GameComputerComponent');
+    const snapshot = {
+      "players": structuredClone(this.players),
+      "currentRank": this.currentRank,
+      "currentIndex": this.currentIndex,
+      "nbDartsLeftToCurrentPlayer": this.nbDartsLeftToCurrentPlayer,
+      "currentPlayerScoreAtFirst": this.currentPlayerScoreAtFirst,
+      "isGameFinished": this.isGameFinished
+    };
+
+    this.snapshots.push(snapshot);
   }
   
   restoreSnapshot(): void {
-    console.warn('method restoreSnapshot does not exist in GameComputerComponent');
+    if (this.snapshots.length > 0) {
+      const snapshot = this.snapshots.pop();
+
+      this.players = snapshot.players;
+      // Set du prototype pour que les méthodes de X01Player soient utilisables
+      // @TODO y'a sans doute mieux à faire... 
+      const proto = Object.getPrototypeOf(new X01Player({ id:0, name: "", order: 0 }, 0));
+      this.players.forEach((el) => Object.setPrototypeOf(el, proto));
+
+      this.currentRank = snapshot.currentRank;
+      this.currentIndex = snapshot.currentIndex;
+      this.currentPlayer = this.players[this.currentIndex];
+      this.nbDartsLeftToCurrentPlayer = snapshot.nbDartsLeftToCurrentPlayer;
+      this.currentPlayerScoreAtFirst = snapshot.currentPlayerScoreAtFirst;
+
+      this.isGameFinished = snapshot.isGameFinished;
+    }
   }
 }

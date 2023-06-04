@@ -4,6 +4,7 @@ import { GameX01Computer } from 'src/app/models/game-computers/gameX01-computer.
 import { GameX01Options } from 'src/app/models/games-options.model';
 import { InputTargetService } from 'src/app/services/input-target.service';
 import { PlayerService } from 'src/app/services/players.service';
+import { LOAD_GAME_STATE, environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-gameX01',
@@ -28,6 +29,10 @@ export class GameX01Component implements OnInit {
 
   ngOnInit(): void {
     this.computer.initGame(this.gameOptions.gameType, this.gameOptions.isDoubleOut, this.gameOptions.nbLegsToWin);
+
+    if (environment.loadGameState === LOAD_GAME_STATE.FINISH) {
+      this.computer.finishGame();
+    }
   }
 
   launchRevenge() {

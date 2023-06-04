@@ -66,7 +66,6 @@ export class GameSelectorComponent {
   }
 
   onSubmitGameForm() {
-    console.log(this.mainForm.value);
     this.launchGame.emit(this.mainForm.value);
   }
 }

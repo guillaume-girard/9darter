@@ -1,0 +1,29 @@
+.player-list-item {
+  display: flex;
+  flex-direction: row;
+
+  span {
+    font-size: 2em;
+  }
+
+  .stacked-buttons {
+    display: flex;
+    flex-direction: column;
+  }
+
+  button.delete {
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    background-color: rgb(210, 40, 60);
+    color: whitesmoke;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    margin-left: 8px;
+
+    &:hover {
+      border: 1px solid black;
+    }
+  }
+}

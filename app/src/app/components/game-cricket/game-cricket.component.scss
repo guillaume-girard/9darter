@@ -1,0 +1,64 @@
+/* Cricket */
+#scoreprint {
+  font-size: 2em;
+
+  table thead th {
+    padding: 10px 20px 0;
+  }
+
+  table thead th.current {
+    position: relative;
+    font-weight: bold;
+  }
+  table thead th.current::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 10px 0 10px;
+    border-color: #ff0000 transparent transparent;
+  }
+  table tbody th {
+    text-align: right;
+  }
+  table td {
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+  }
+  table td .bar {
+    border: 2px solid red;
+    display: inline-block;
+    height: 1.3em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0px;
+  }
+  table td .bar.bar-one {
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg);
+  }
+  table td .bar.bar-two {
+    transform:
+        translate(-50%, -50%)
+        rotate(135deg);
+  }
+  table td .bar.bar-open {
+    width: 1em;
+    height: 1em;
+    border-radius: .5em;
+    border-width: 4px;
+    transform: translate(-50%, -50%);
+  }
+  tfoot {
+    background-color: gray;
+    color: whitesmoke;
+  }
+}

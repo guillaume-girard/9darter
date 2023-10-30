@@ -1,0 +1,32 @@
+<div id="game-selector-container">
+  <h2>Sélection du jeu</h2>
+
+  <form [formGroup]="mainForm" (ngSubmit)="onSubmitGameForm()">
+    <div class="radio-games">
+      <input id="radio-game301" type="radio" value="301" [formControl]="gameMode" /><label for="radio-game301">301</label>
+      <input id="radio-game501" type="radio" value="501" [formControl]="gameMode" /><label for="radio-game501">501</label>
+      <input id="radio-gameCricket" type="radio" value="cricket" [formControl]="gameMode" /><label for="radio-gameCricket">Cricket</label>
+    </div>
+
+    <div class="game-options" *ngIf="showOptionsCtrl$ | async">
+      <div class="game-301-options" *ngIf="show301OptionsCtrl">
+        Double-out <input type="checkbox" [formControl]="isDoubleOut" />
+        Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
+      </div>
+      <div class="game-501-options" *ngIf="show501OptionsCtrl">
+        Double-out <input type="checkbox" [formControl]="isDoubleOut" />
+        Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
+      </div>
+      <div class="game-cricket-options" *ngIf="showCricketOptionsCtrl">
+        Reverse <input type="checkbox" [formControl]="isReverseCricket" />
+        Crazy <input type="checkbox" [formControl]="isCrazyCricket" />
+        Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="!mainForm.valid">Lancer le jeu</button>
+  </form>
+  <div class="overlay" *ngIf="!canLaunchGame">
+    <p>Sélectionner au moins un joueur</p>
+  </div>
+</div>

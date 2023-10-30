@@ -1,3 +1,19 @@
-<h1>9darter V2</h1>
+<header>
+  <h1>9darter V2</h1>
+  <div class="new-game-button" *ngIf="gameLoaded">
+    <button (click)="showGameLoader()">Nouveau jeu</button>
+  </div>
+</header>
 
-<router-outlet></router-outlet>
+<main>
+  <div class="game-launcher" *ngIf="!gameLoaded">
+    <app-player-list></app-player-list>
+    <app-game-selector [canLaunchGame]="canLaunchGame" (launchGame)="launchGame($event)"></app-game-selector>
+  </div>
+  
+  <div class="game" *ngIf="gameLoaded">
+    <app-gameX01 *ngIf="isX01Launched" [gameOptions]="gameOptions"></app-gameX01>
+    <app-game-cricket *ngIf="isCricketLaunched" [gameOptions]="gameOptions"></app-game-cricket>
+    <app-input-target></app-input-target>
+  </div>
+</main>

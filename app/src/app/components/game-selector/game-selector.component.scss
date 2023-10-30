@@ -1,0 +1,64 @@
+#game-selector-container {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+
+  h2 {
+    text-align: center;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(66, 66, 66, .7);
+    color: whitesmoke;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+  }
+
+  .radio-games {
+    display: flex;
+    margin-bottom: 20px;
+
+    input {
+      display: none;
+
+      &:checked + label {
+        opacity: 1;
+        border-color: rgb(230, 60, 100);
+        box-shadow: 0px 0px 10px 8px white;
+      }
+    }
+
+    label {
+      cursor: pointer;
+      padding: 20px;
+      margin-right: 15px;
+      border-radius: 8px;
+      font-size: 2em;
+      background-color: rgb(200, 80, 120);
+      color: whitesmoke;
+      opacity: .6;
+      transition: box-shadow ease-out 0.2s;
+      border-width: 3px;
+      border-color: transparent;
+      border-style: solid;
+
+      &:hover {
+        border-color: rgb(185, 22, 60);
+      }
+    }
+  }
+
+  .game-options {
+    margin-bottom: 20px;
+  }
+}

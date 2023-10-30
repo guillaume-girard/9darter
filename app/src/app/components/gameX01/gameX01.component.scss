@@ -1,0 +1,98 @@
+#scoreprint {
+  padding: 10px;
+  font-size: 30px;
+  height: 400px;
+  background-image: linear-gradient(#e0e0de, white);
+}
+
+#scoreprint h2 {
+  margin: 0;
+  width: 20%;
+  font-weight: normal;
+  display: inline-block;
+  position: relative;
+}
+
+#scoreprint .current:not(.finished) {
+  background-color: rgb(180, 180, 180);
+
+  h2 {
+    font-weight: bold;
+    padding-left: 15px;
+
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7.5px 0 7.5px 10px;
+      border-color: transparent transparent transparent #ff0000;
+    }
+  }
+}
+
+#scoreprint span {
+  font-weight: bold;
+  flex: 1;
+}
+
+#scoreprint div.scoreline span.score {
+  color: red;
+}
+
+#scoreprint div.scoreline span.suggestion {
+  color: black;
+  font-size: 0.5em;
+  font-weight: bold;
+  letter-spacing: -1px;
+  text-align: right;
+  padding-right: 10px;
+  background-color: gray;
+  word-spacing: 5px;
+}
+
+#scoreprint div {
+  display: inline-block;
+}
+
+#scoreprint div.scoreline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#scoreprint div.scoreline.finished {
+  opacity: .5;
+}
+
+#scoreprint div.average {
+  width: 20%;
+}
+
+#scoreprint div.cigare {
+  height: 100%;
+  flex: 2;
+}
+
+#scoreprint div.cigare div {
+  margin-right: 15px;
+}
+
+#scoreprint div.cigare div span {
+  display: inline-block;
+  height: 30px;
+  width: 6px;
+  border-radius: 2px;
+  margin-right: 5px;
+  border: 1px solid grey;
+}
+
+#scoreprint div.cigare div span.fill {
+  background-color: red;
+}

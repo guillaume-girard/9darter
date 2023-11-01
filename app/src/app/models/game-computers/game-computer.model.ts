@@ -21,7 +21,7 @@ export abstract class GameComputer {
   ) {
     this.isGameFinished = false;
     this.currentIndex = 0;
-    this.currentRank = 1;
+    this.currentRank = 0;
     this.nbLegsToWin = 1;
     this.snapshots = [];
 
@@ -79,7 +79,7 @@ export abstract class GameComputer {
     this.endPlayerRound(player);
     
     player.finished = true;
-    player.rank = this.currentRank++;
+    player.rank = ++this.currentRank;
     
     if (this.currentRank === this.players.length) {
       this.finishGame();

@@ -81,7 +81,8 @@ export abstract class GameComputer {
     player.finished = true;
     player.rank = this.currentRank++;
     
-    if (this.currentRank === this.players.length) {
+    // >= nécessaire pour le cas un seul joueur [Issue #23]
+    if (this.currentRank >= this.players.length) {
       this.finishGame();
     } else {
       this.nextPlayer();

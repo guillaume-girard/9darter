@@ -2,6 +2,7 @@ import { Injectable, OnInit } from "@angular/core";
 import { PlayerInGame } from "../player.model";
 import { PlayerService } from "src/app/services/players.service";
 import { InputTargetService } from "src/app/services/input-target.service";
+import { Subscription } from "rxjs";
 
 @Injectable()
 export abstract class GameComputer {
@@ -12,6 +13,7 @@ export abstract class GameComputer {
   nbLegsToWin: number;
   isGameFinished: boolean;
   protected snapshots: any[];
+  protected subs: Subscription;
 
   constructor(
     protected playerService: PlayerService,
@@ -22,9 +24,12 @@ export abstract class GameComputer {
     this.currentRank = 1;
     this.nbLegsToWin = 1;
     this.snapshots = [];
-    this.inputTargetService.targetInputed.subscribe((value) => { this.createSnapshot(); this.addDart(value) });
-    this.inputTargetService.nextPlayer.subscribe(() => { this.endPlayerRound(); this.nextPlayer(); });
-    this.inputTargetService.cancel.subscribe(() => this.restoreSnapshot());
+
+    this.subs = new Subscription();
+
+    this.subs.add(this.inputTargetService.targetInputed.subscribe((value) => { this.createSnapshot(); this.addDart(value) }));
+    this.subs.add(this.inputTargetService.nextPlayer.subscribe(() => { this.endPlayerRound(); this.nextPlayer(); }));
+    this.subs.add(this.inputTargetService.cancel.subscribe(() => this.restoreSnapshot()));
   }
 
   protected abstract createSnapshot(): void;
@@ -38,6 +43,11 @@ export abstract class GameComputer {
   protected abstract addDart(value: string): void;
 
   protected abstract finishGame(): void;
+
+  public destroyComputer(): void {
+    console.log("destroy", this.constructor.name);
+    this.subs.unsubscribe();
+  }
 
   protected startCurrentPlayerRound(): void {
     return;

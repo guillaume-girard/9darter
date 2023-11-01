@@ -35,6 +35,10 @@ export class GameX01Component implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.computer.destroyComputer();
+  }
+  
   get gameTitle(): string {
     let str = this.gameOptions.gameType;
     if (this.gameOptions.isDoubleOut)

@@ -16,7 +16,7 @@ export const LOAD_GAME_STATE = {
 export const environment = {
   production: false,
   loadDebug: true,
-  loadNbPlayers: 4,
+  loadNbPlayers: 2,
   loadGame: null,
   loadGameState: LOAD_GAME_STATE.START
 };

@@ -23,3 +23,7 @@ Format utilisé :
 - X : incrémenté lors d'une mise à jour majeure (nouveau design, nouveau paradigme, nouveau langage/framework, fonctionnalité modifiant drastiquement l'usage de l'appli (ex : jeu en ligne), ...)
 - Y : incrémenté lors d'une mise à jour mineure (nouvelle fonctionnalité, nouveau jeu implémenté, modification légère de l'UI/UX, ...)
 - Z (optionnel) : incrémenté lors de corrections de bugs ou lors de modifications invisibles par l'utilisateur (optimisation de code, gain de performance, modifications liées aux tests, ...)
+
+## Roadmap
+Utiliser le [trello](https://trello.com/b/2hxsLkAm/9darter) pour déclarer et organiser les fonctionnalités/développements à réaliser.  
+Les [issues Git](https://github.com/guillaume-girard/9darter/issues) ne doivent recenser que les bugs.

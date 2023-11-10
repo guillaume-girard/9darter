@@ -15,9 +15,9 @@ export const LOAD_GAME_STATE = {
 
 export const environment = {
   production: false,
-  loadDebug: false,
-  loadNbPlayers: 1,
-  loadGame: 301,
+  loadDebug: true,
+  loadNbPlayers: 6,
+  loadGame: null,
   loadGameState: LOAD_GAME_STATE.START
 };
 

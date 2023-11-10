@@ -15,8 +15,13 @@ export const LOAD_GAME_STATE = {
 
 export const environment = {
   production: false,
+<<<<<<< HEAD
   loadDebug: false,
   loadNbPlayers: 4,
+=======
+  loadDebug: true,
+  loadNbPlayers: 6,
+>>>>>>> featuring-intensify
   loadGame: null,
   loadGameState: LOAD_GAME_STATE.START
 };

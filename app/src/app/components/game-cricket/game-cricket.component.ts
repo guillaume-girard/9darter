@@ -34,6 +34,10 @@ export class GameCricketComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.computer.destroyComputer();
+  }
+
   get gameTitle(): string {
     let str = "";
     if (this.gameOptions.isReverse)

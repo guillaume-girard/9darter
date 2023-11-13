@@ -2,6 +2,7 @@ import { PlayerService } from "src/app/services/players.service";
 import { X01Player } from "../x01player.model";
 import { GameComputer } from "./game-computer.model";
 import { InputTargetService } from "src/app/services/input-target.service";
+import { grosvangerwen } from "src/app/app.component";
 
 export class GameX01Computer extends GameComputer {
   gameType!: string;
@@ -52,10 +53,10 @@ export class GameX01Computer extends GameComputer {
     // van gerwen
     if (valueNumber === 20 && multiplyBy === 3) {
       // van gerwen grosse gueule
-      var imgvangerwen = document.createElement('img');
-      imgvangerwen.src = "./assets/van_gerwen_grosse_gueule.png";
-      imgvangerwen.className = "grosvangerwen";
-      document.body.appendChild(imgvangerwen);
+      grosvangerwen?.addEventListener('animationend', () => {
+        grosvangerwen?.classList.remove("animate");
+      })
+      grosvangerwen?.classList.add("animate");
     }
 
     valueNumber *= multiplyBy;

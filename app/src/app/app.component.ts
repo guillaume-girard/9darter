@@ -4,6 +4,8 @@ import { GameX01Options } from './models/games-options.model';
 import { DebugService } from './services/debug.service';
 import { environment } from 'src/environments/environment.development';
 
+export const grosvangerwen = document.getElementById('grosvangerwen');
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

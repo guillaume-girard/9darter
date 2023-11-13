@@ -2,6 +2,7 @@ import { InputTargetService } from "src/app/services/input-target.service";
 import { PlayerService } from "src/app/services/players.service";
 import { GameComputer } from "./game-computer.model";
 import { CricketPlayer } from "../cricket-player.model";
+import { grosvangerwen } from "src/app/app.component";
 
 export class GameCricketComputer extends GameComputer {
   gameType!: string;
@@ -56,13 +57,13 @@ export class GameCricketComputer extends GameComputer {
     let targetValue: string = value === "b" ? "Bull's eye" : value;
 
     // van gerwen
-    // if (value === 20 && multiplyBy === 3) {
-    //   // van gerwen grosse gueule
-    //   var imgvangerwen = document.createElement('img');
-    //   imgvangerwen.src = "./img/van_gerwen_grosse_gueule.png";
-    //   imgvangerwen.className = "grosvangerwen";
-    //   document.body.appendChild(imgvangerwen);
-    // }
+    if (value === this.targets[0] && multiplyBy === 3) {
+      // van gerwen grosse gueule
+      grosvangerwen?.addEventListener('animationend', () => {
+        grosvangerwen?.classList.remove("animate");
+      })
+      grosvangerwen?.classList.add("animate");
+    }
 
     if (this.targets.indexOf(targetValue) >= 0) {
       this.score(multiplyBy, targetValue);

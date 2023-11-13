@@ -2,7 +2,7 @@
 Application permettant de compter les points aux jeux de fléchettes. Utile lorsque la cible n'est pas électronique. 
 
 ## Git "Flow" du projet
-__Branches__
+### Branches
 - Branche ***develop*** : accueille les développements en cours
     * tests non réalisés (ou partiellement)
     * peut être à un stade où l'application ne fonctionne pas
@@ -16,7 +16,7 @@ __Branches__
     * peut être utilisée pour des commit de hotfix
     * chaque merge de *beta* vers cette branche fait l'objet d'un nouveau *tag* de version
 
-__Tags de version__ 
+### Tags de version
 
 Format utilisé :  
 > __vX.Y\[.Z\]__
@@ -26,4 +26,26 @@ Format utilisé :
 
 ## Roadmap
 Utiliser le [trello](https://trello.com/b/2hxsLkAm/9darter) pour déclarer et organiser les fonctionnalités/développements à réaliser.  
-Les [issues Git](https://github.com/guillaume-girard/9darter/issues) ne doivent recenser que les bugs.
+Les [issues Git](https://github.com/guillaume-girard/9darter/issues) ne doivent recenser que les *bugs* et les *optimisations* du code.
+
+## Issues
+
+### Bugs
+Les bugs trouvés sur l'application sont caractérisés par un niveau de sévérité et un niveau de priorité, correspondant aux labels dans les issues GitHub définis comme suit :
+
+__Sévérité__
+- ***Critique*** : empêche le bon fonctionnement de l'application
+- ***Majeur*** : n'empêche pas le bon fonctionnement de l'application mais nuit à l'expérience utilisateur
+- ***Mineur*** : bug non visible pour l'utilisateur
+
+__Priorité__
+- ***Haute*** : devrait être corrigé dès que possible
+- ***Moyenne*** : devrait être corrigé
+- ***Basse*** : peut ne pas être corrigé
+
+### Optimisations
+Les optimisations sont caractérisée par leur niveau d'utilité dans le projet, correspondant à 3 labels différents et définis comme suit :
+- ***Must have*** : l'optimisation simplifie drastiquement l'implémentation de futures fonctionnalités 
+- ***Should have*** : cette optimisation permettrait d'améliorer sensiblement le code ou l'application
+- ***Mmmh!*** : optimisation permettant de se caresser les tétons
+

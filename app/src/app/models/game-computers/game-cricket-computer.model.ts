@@ -59,10 +59,10 @@ export class GameCricketComputer extends GameComputer {
     // van gerwen
     if (value === this.targets[0] && multiplyBy === 3) {
       // van gerwen grosse gueule
-      grosvangerwen?.addEventListener('animationend', () => {
-        grosvangerwen?.classList.remove("animate");
+      grosvangerwen.addEventListener('animationend', () => {
+        grosvangerwen.classList.remove("animate");
       })
-      grosvangerwen?.classList.add("animate");
+      grosvangerwen.classList.add("animate");
     }
 
     if (this.targets.indexOf(targetValue) >= 0) {

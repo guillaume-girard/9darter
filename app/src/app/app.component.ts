@@ -4,7 +4,20 @@ import { GameX01Options } from './models/games-options.model';
 import { DebugService } from './services/debug.service';
 import { environment } from 'src/environments/environment.development';
 
-export const grosvangerwen = document.getElementById('grosvangerwen');
+export const wobblingwrapper: HTMLSpanElement = (function() {
+  const spanElmt = document.createElement("span");
+  spanElmt.id = "wobblingwrapper";
+  document.body.prepend(spanElmt);
+  return spanElmt;
+})();
+
+export const grosvangerwen: HTMLImageElement = (function() {
+  const imgElmt = document.createElement("img");
+  imgElmt.id = "grosvangerwen";
+  imgElmt.src = "./assets/van_gerwen_grosse_gueule.png";
+  document.body.prepend(imgElmt);
+  return imgElmt;
+})();
 
 @Component({
   selector: 'app-root',

@@ -18,7 +18,7 @@ app-root {
 
 /* BUST et VANGERWEN */
 #grosvangerwen,
-.spanbust {
+#wobblingwrapper {
   display: none;
   z-index: 1000;
   position: fixed;
@@ -52,7 +52,7 @@ app-root {
   animation: vangerwen 1s ease-out forwards;
 }
 
-@keyframes bust {
+@keyframes wobbling {
   0% {
     opacity: 1;
     transform:
@@ -81,14 +81,16 @@ app-root {
   }
 }
 
-.spanbust {
-  display: flex;
+#wobblingwrapper {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 300px;
+  width: 100%;
   font-size: 100px;
   font-weight: bold;
-  animation: bust .15s 5 linear;
+}
+
+#wobblingwrapper.animate {
+  display: flex;
+  animation: wobbling .15s 5 linear;
 }

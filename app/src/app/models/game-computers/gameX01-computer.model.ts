@@ -2,7 +2,7 @@ import { PlayerService } from "src/app/services/players.service";
 import { X01Player } from "../x01player.model";
 import { GameComputer } from "./game-computer.model";
 import { InputTargetService } from "src/app/services/input-target.service";
-import { grosvangerwen } from "src/app/app.component";
+import { grosvangerwen, wobblingwrapper } from "src/app/app.component";
 
 export class GameX01Computer extends GameComputer {
   gameType!: string;
@@ -53,10 +53,10 @@ export class GameX01Computer extends GameComputer {
     // van gerwen
     if (valueNumber === 20 && multiplyBy === 3) {
       // van gerwen grosse gueule
-      grosvangerwen?.addEventListener('animationend', () => {
-        grosvangerwen?.classList.remove("animate");
+      grosvangerwen.addEventListener('animationend', () => {
+        grosvangerwen.classList.remove("animate");
       })
-      grosvangerwen?.classList.add("animate");
+      grosvangerwen.classList.add("animate");
     }
 
     valueNumber *= multiplyBy;
@@ -75,11 +75,13 @@ export class GameX01Computer extends GameComputer {
         (this.currentPlayer.score === 0 && this.isDoubleOut && multiplyBy !== 2) ||
         this.currentPlayer.score < 0 ||
         (this.currentPlayer.score === 1 && this.isDoubleOut)) {
+
         // BUST!
-        var spanBust = document.createElement('span');
-        spanBust.innerText = "BUST!";
-        spanBust.className = "spanbust";
-        document.body.appendChild(spanBust);
+        wobblingwrapper.innerText = "BUST !";
+        wobblingwrapper.addEventListener("animationend", () => {
+          wobblingwrapper.classList.remove("animate");
+        })
+        wobblingwrapper.classList.add("animate");
 
         this.currentPlayer.score = this.currentPlayerScoreAtFirst;
         this.endPlayerRound();

@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/viva-light/theme.css";
+@import "primeng/resources/primeng.css";
+@import '@fontsource/share-tech-mono';
 
 * {
   box-sizing: border-box;
@@ -8,6 +11,11 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
+  font-family: 'Share Tech Mono', sans-serif;
+}
+
+input, button {
+  font-family: 'Share Tech Mono', sans-serif;
 }
 
 app-root {

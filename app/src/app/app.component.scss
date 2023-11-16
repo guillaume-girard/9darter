@@ -1,3 +1,5 @@
+@use "../variables";
+
 header {
   background-color: rgb(80, 60, 90);
   color: whitesmoke;
@@ -11,8 +13,8 @@ header {
 
 main {
   width: 100%;
-  flex: 2;
-  margin: 10px 0;
+  flex: 1;
+  padding: 10px;
 
   .game-launcher {
     width: 100%;
@@ -21,16 +23,22 @@ main {
 
     & > * {
       position: relative;
+      flex: 1;
       display: block;
       height: 100%;
-      background: linear-gradient(to right, #eee, #888);
-      border-radius: 0px 15px 15px 0px;
-      border-color: #555;
-      border-width: 3px 3px 3px 0;
+      background: linear-gradient(to right, #eee, variables.$game_laucher_backgroundcolor);
+      border-color: variables.$game_laucher_bordercolor;
       border-style: solid;
     }
 
     app-player-list {
+      border-width: 3px;
+      border-radius: 
+          variables.$game_launcher_external_radius
+          variables.$game_launcher_internal_radius
+          variables.$game_launcher_internal_radius
+          variables.$game_launcher_external_radius;
+
       &::after {
         content: "";
         position: absolute;
@@ -40,26 +48,28 @@ main {
         width: 20px; height: 20px;
         border-style: solid;
         border-width: 3px 3px 0 0;
-        border-color: #555;
+        border-color: variables.$game_laucher_bordercolor;
         transform: 
           rotate(45deg)
           translateX(100%);
         transform-origin: left;
-        background-color: #888;
+        background-color: variables.$game_laucher_backgroundcolor;
       }
     }
 
 
     app-player-list {
-      flex: 1;
+      // flex: 1;
       z-index: 200;
     }
 
     app-game-selector {
-      flex: 2;
-      margin-left: -20px;
-      padding-left: 20px;
+      // flex: 2;
+      margin-left: 0 - variables.$game_launcher_internal_radius;
+      padding-left: variables.$game_launcher_internal_radius;
       z-index: 100;
+      border-radius: 0px variables.$game_launcher_external_radius variables.$game_launcher_external_radius 0px;
+      border-width: 3px 3px 3px 0;
     }
   }
 
@@ -67,4 +77,8 @@ main {
     max-width: 1000px;
     margin: auto;
   }
+}
+
+footer {
+  text-align: center;
 }

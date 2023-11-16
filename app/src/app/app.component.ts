@@ -30,6 +30,7 @@ export class AppComponent {
   isX01Launched = false;
   isCricketLaunched = false;
   canLaunchGame = false;
+  appVersion = environment.version;
 
   constructor(private playerService: PlayerService, private debugService: DebugService) {}
   
@@ -44,6 +45,7 @@ export class AppComponent {
   launchGame(gameOptions: any) {
     this.isX01Launched = false;
     this.isCricketLaunched = false;
+    
     switch(gameOptions.gameMode) {
       case '301': 
         this.launch301Game(gameOptions.isDoubleOut, gameOptions.nbLegsToWin);

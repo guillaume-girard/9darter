@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Player } from 'src/app/models/player.model';
 import { PlayerService } from 'src/app/services/players.service';
+
 
 @Component({
   selector: 'app-player-list',
@@ -8,17 +9,31 @@ import { PlayerService } from 'src/app/services/players.service';
   styleUrls: ['./player-list.component.scss']
 })
 export class PlayerListComponent {
-  players!: Player[];
+  availablePlayers!: Player[];
+  selectedPlayers!: Player[];
   playerName: string = '';
 
-  constructor(private playerService: PlayerService) { }
+  constructor(private playerService: PlayerService) { 
+    console.log(this.playerService.getAvailablePlayers());
+    setTimeout(() => {
+      this.availablePlayers = this.playerService.getAvailablePlayers();
+    }, 1000);
+  }
 
   ngOnInit(): void {
-    this.players = this.playerService.getPlayers();
+      this.playerService.$availablePlayers.subscribe((players) => {
+      this.availablePlayers = players;
+      console.log("init player list subscribe", this.availablePlayers);
+    });
+    this.selectedPlayers = [];
   }
 
   removePlayer(playerId: number): void {
     this.playerService.removePlayer(playerId);
+  }
+
+  updateSelectedPlayers(): void {
+    this.playerService.setSelectedPlayers(this.selectedPlayers);
   }
 
   onSubmitNewPlayer(): void {

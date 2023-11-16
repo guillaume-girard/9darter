@@ -212,7 +212,7 @@ export class GameCricketComputer extends GameComputer {
       this.players = snapshot.players;
       // Set du prototype pour que les méthodes de CricketPlayer soient utilisables
       // @TODO y'a sans doute mieux à faire... 
-      const proto = Object.getPrototypeOf(new CricketPlayer({ id: 0, name: "", order: 0 }, []));
+      const proto = Object.getPrototypeOf(new CricketPlayer({ id: 0, name: "" }, []));
       this.players.forEach((el) => Object.setPrototypeOf(el, proto));
 
       this.currentRank = snapshot.currentRank;

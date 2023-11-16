@@ -26,7 +26,8 @@
 
     <button type="submit" [disabled]="!mainForm.valid">Lancer le jeu</button>
   </form>
-  <div class="overlay" *ngIf="!canLaunchGame">
-    <p>Sélectionner au moins un joueur</p>
-  </div>
+</div>
+
+<div class="overlay" *ngIf="!canLaunchGame">
+  <p>Sélectionner au moins un joueur</p>
 </div>

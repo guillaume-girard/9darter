@@ -15,6 +15,7 @@ export const LOAD_GAME_STATE = {
 
 export const environment = {
   production: false,
+  version: '2.0-beta',
   loadDebug: false,
   loadNbPlayers: 4,
   loadGame: null,

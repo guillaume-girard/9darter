@@ -7,7 +7,7 @@
 
 <main>
   <div class="game-launcher" *ngIf="!gameLoaded">
-    <app-player-list></app-player-list>
+    <app-players-selector></app-players-selector>
     <app-game-selector [canLaunchGame]="canLaunchGame" (launchGame)="launchGame($event)"></app-game-selector>
   </div>
   

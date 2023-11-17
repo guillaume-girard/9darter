@@ -1,0 +1,30 @@
+<div id="input-player-container">
+  <h2>Sélection des joueurs</h2>
+  
+  <form>
+    <input id="input-name" type="text" [(ngModel)]="playerName" [ngModelOptions]="{standalone: true}" placeholder="Ajouter un joueur" />
+    <button type="submit" (click)="onSubmitNewPlayer()">OK</button>
+  </form>
+
+  <p-pickList 
+      [source]="availablePlayers" 
+      [target]="selectedPlayers" 
+      sourceHeader="Joueurs disponibles"
+      targetHeader="Joueurs sélectionnés" 
+      [responsive]="true" 
+      [showSourceControls] = "false"
+      breakpoint="900px"
+      (onMoveToTarget)="updateSelectedPlayers()"
+      (onMoveToSource)="updateSelectedPlayers()"
+      (onMoveAllToSource)="updateSelectedPlayers()"
+      (onMoveAllToTarget)="updateSelectedPlayers()"
+      (onTargetReorder)="reorderSelectedPlayers()">
+    <ng-template let-player pTemplate="item">
+      <div>
+        <span>{{ player.name }}</span>
+        <p-confirmPopup></p-confirmPopup>
+        <p-button icon="pi pi-times" (click)="deletePlayer($event, player.id)"></p-button>
+      </div>
+    </ng-template>
+  </p-pickList>
+</div>

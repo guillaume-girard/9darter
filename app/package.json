@@ -29,6 +29,7 @@
     "@angular/platform-browser-dynamic": "^16.2.12",
     "@angular/router": "^16.2.12",
     "@fontsource/share-tech-mono": "^5.0.8",
+    "primeicons": "^6.0.1",
     "primeng": "^16.4.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

@@ -14,10 +14,10 @@ header {
 main {
   width: 100%;
   flex: 1;
+  overflow: hidden;
   padding: 10px;
 
   .game-launcher {
-    width: 100%;
     height: 100%;
     display: flex;
 
@@ -31,7 +31,8 @@ main {
       border-style: solid;
     }
 
-    app-player-list {
+    app-players-selector {
+      z-index: 200;
       border-width: 3px;
       border-radius: 
           variables.$game_launcher_external_radius
@@ -57,14 +58,7 @@ main {
       }
     }
 
-
-    app-player-list {
-      // flex: 1;
-      z-index: 200;
-    }
-
     app-game-selector {
-      // flex: 2;
       margin-left: 0 - variables.$game_launcher_internal_radius;
       padding-left: variables.$game_launcher_internal_radius;
       z-index: 100;

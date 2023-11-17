@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Player } from "../models/player.model";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { X01Player } from "../models/x01player.model";
 import { CricketPlayer } from "../models/cricket-player.model";
 
@@ -8,63 +8,76 @@ import { CricketPlayer } from "../models/cricket-player.model";
   providedIn: 'root'
 })
 export class PlayerService {
-  availablePlayers: Player[] = [];
-  selectedPlayers: Player[] = [];
-  $availablePlayers: Subject<Player[]> = new Subject<Player[]>();
-  $selectedPlayers: Subject<Player[]> = new Subject<Player[]>();
+  private allPlayers: Player[] = [];
+  private availablePlayers: Player[] = [];
+  private selectedPlayers: Player[] = [];
+
+  $availablePlayers: BehaviorSubject<Player[]>;
+  $selectedPlayers: BehaviorSubject<Player[]>;
   private lastPlayerId = 0;
-  nbPlayersChange: Subject<number> = new Subject<number>();
+  $nbPlayersChange: Subject<number> = new Subject<number>();
 
   constructor() {
-    // Permet de trigger le subject.next() après les ngOninit @TODO comportement à optimiser
-    setTimeout(() => {
-      let storedPlayers = localStorage.getItem("9darterplayers") || "";
-      if (storedPlayers.length > 0) {
-        let storedPlayersJSON: string[] = JSON.parse(storedPlayers);
+    this.$availablePlayers = new BehaviorSubject(this.availablePlayers);
+    this.$selectedPlayers = new BehaviorSubject(this.selectedPlayers);
 
-        for(let name of storedPlayersJSON) {
-          this.addPlayer(name);
-        }
+    const storedPlayers = localStorage.getItem("9darterplayers") || "";
+    if (storedPlayers.length > 0) {
+      let storedPlayersJSON: string[] = JSON.parse(storedPlayers);
+
+      for(let name of storedPlayersJSON) {
+        this.addAvailablePlayer(name, false);
       }
-    })
+    }
+
+    this.allPlayers = this.availablePlayers.concat(this.selectedPlayers);
+    this.$availablePlayers.next(this.availablePlayers);
   }
 
   private storePlayers(): void {
-    localStorage.setItem("9darterplayers", JSON.stringify(this.availablePlayers.map(p => p.name)));
+    localStorage.setItem("9darterplayers", JSON.stringify(this.allPlayers.map(p => p.name)));
   }
 
-  public addPlayer(playerName: string): void {
+  public addAvailablePlayer(playerName: string, done: boolean = true): void {
     let newPlayer: Player = { id: this.lastPlayerId++, name: playerName };
-    this.availablePlayers.push(newPlayer); // this.$available.value à voir
-    this.$availablePlayers.next(this.availablePlayers);
+    this.availablePlayers.push(newPlayer);
     
-    this.nbPlayersChange.next(this.availablePlayers.length);
-
-    this.storePlayers();
-  }
-
-  public removePlayer(playerId: number): void {
-    let playerToRemove = this.availablePlayers.find(player => player.id === playerId);
-
-    if (playerToRemove) {
-      let playerIndexToRemove = this.availablePlayers.indexOf(playerToRemove);
-      this.availablePlayers.splice(playerIndexToRemove, 1);
-      this.nbPlayersChange.next(this.availablePlayers.length);
+    if(done) {
+      this.allPlayers = this.availablePlayers.concat(this.selectedPlayers);
+      this.$availablePlayers.next(this.availablePlayers);
+      this.storePlayers();
     }
-
-    this.storePlayers();
   }
 
-  public getAvailablePlayers(): Player[] {
-    return this.availablePlayers;
-  }
+  public deletePlayer(playerId: number): void {
+    let playerToDelete = this.availablePlayers.find(player => player.id === playerId);
+    console.log("going to delete: ", playerToDelete);
+    
+    if (playerToDelete) {
+      let playerIndexToDelete = this.availablePlayers.indexOf(playerToDelete);
+      console.log("index in availablePlayers and availablePlayers statebefore", playerIndexToDelete, "length:", this.availablePlayers.length, JSON.stringify(this.availablePlayers));
+      this.availablePlayers.splice(playerIndexToDelete, 1);
+      console.log("availablePlayers stateafter: ", this.availablePlayers.length, JSON.stringify(this.availablePlayers));
+      
+      console.log("allplayer before", this.allPlayers);
+      this.allPlayers = this.availablePlayers.concat(this.selectedPlayers);
+      console.log("allplayer after", this.allPlayers);
 
-  public getSelectedPlayers(): Player[] {
-    return this.selectedPlayers;
+      this.$availablePlayers.next(this.availablePlayers);
+
+      this.storePlayers();
+    }
   }
 
   public setSelectedPlayers(players: Player[]) {
     this.selectedPlayers = players;
+    this.$selectedPlayers.next(this.selectedPlayers);
+    this.$nbPlayersChange.next(this.selectedPlayers.length);
+  }
+
+  public setAvailablePlayers(players: Player[]) {
+    this.availablePlayers = players;
+    this.$availablePlayers.next(this.availablePlayers);
   }
 
   public getPlayersForX01Game(startScore: number): X01Player[] {

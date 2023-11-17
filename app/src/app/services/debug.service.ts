@@ -16,7 +16,7 @@ export class DebugService {
     const nbPlayersToLoad = environment.loadNbPlayers;
 
     for (let i = 0; i < nbPlayersToLoad; i++) {
-      this.playerService.addPlayer(faker.person.firstName());
+      this.playerService.addAvailablePlayer(faker.person.firstName());
     }
 
     if (environment.loadGame) {

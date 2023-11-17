@@ -26,11 +26,10 @@ main {
       flex: 1;
       display: block;
       height: 100%;
-      background: linear-gradient(to right, #eee, variables.$game_laucher_backgroundcolor);
       border-color: variables.$game_laucher_bordercolor;
       border-style: solid;
     }
-
+    
     app-players-selector {
       z-index: 200;
       border-width: 3px;
@@ -39,7 +38,8 @@ main {
           variables.$game_launcher_internal_radius
           variables.$game_launcher_internal_radius
           variables.$game_launcher_external_radius;
-
+      background: linear-gradient(to right, variables.$game_laucher_backgroundcolor_start, variables.$game_laucher_backgroundcolor);
+      
       &::after {
         content: "";
         position: absolute;
@@ -51,19 +51,21 @@ main {
         border-width: 3px 3px 0 0;
         border-color: variables.$game_laucher_bordercolor;
         transform: 
-          rotate(45deg)
-          translateX(100%);
-        transform-origin: left;
+        rotate(45deg) 
+        translateX(20%) 
+        translateY(-45%);
+        transform-origin: right;
         background-color: variables.$game_laucher_backgroundcolor;
       }
     }
-
+    
     app-game-selector {
       margin-left: 0 - variables.$game_launcher_internal_radius;
-      padding-left: variables.$game_launcher_internal_radius;
       z-index: 100;
+      background: linear-gradient(to right, variables.$game_selector_backgroundcolor_start, variables.$game_selector_backgroundcolor);
       border-radius: 0px variables.$game_launcher_external_radius variables.$game_launcher_external_radius 0px;
       border-width: 3px 3px 3px 0;
+      overflow: hidden;
     }
   }
 

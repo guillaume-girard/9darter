@@ -6,7 +6,7 @@
   width: 100%;
   height: 100%;
   padding: 20px;
-  padding-left: variables.$game_launcher_internal_radius;
+  padding-left: variables.$game_launcher_internal_radius * 2;
 
   h2 {
     text-align: center;
@@ -21,7 +21,7 @@
 
       &:checked + label {
         opacity: 1;
-        border-color: rgb(230, 60, 100);
+        border-color: variables.$game_button_background_color;
         box-shadow: 0px 0px 10px 8px white;
       }
     }
@@ -32,7 +32,7 @@
       margin-right: 15px;
       border-radius: 8px;
       font-size: 2em;
-      background-color: rgb(200, 80, 120);
+      background-color: variables.$game_button_background_color;
       color: whitesmoke;
       opacity: .6;
       transition: box-shadow ease-out 0.2s;
@@ -49,6 +49,56 @@
   .game-options {
     margin-bottom: 20px;
   }
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    z-index: 50;
+    border-style: solid;
+    border-color: #444;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    background: repeating-linear-gradient(
+        to top,
+        variables.$porte_de_garage_shadowcolor 0px, 
+        variables.$porte_de_garage_shadowcolor 2px, 
+        variables.$porte_de_garage_color 8px, 
+        variables.$porte_de_garage_color 26px
+    );
+    transition: top cubic-bezier( 0.4, 1.5, 0.83, 0.75 ) 0.8s;
+    border-width: 0 0 1px 0;
+  }
+
+  &::after {
+    bottom: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        variables.$porte_de_garage_shadowcolor 0px, 
+        variables.$porte_de_garage_shadowcolor 2px, 
+        variables.$porte_de_garage_color 8px, 
+        variables.$porte_de_garage_color 26px
+    );
+    transition: bottom cubic-bezier( 0.4, 1.5, 0.83, 0.75 ) 0.8s;
+    border-width: 1px 0 0 0;
+  }
+  
+  &.visible {
+    &::before {
+      top: -50%;
+      transition: top cubic-bezier( 0.29, 0.14, 0.54, -0.35 ) 0.8s 0.2s;
+    }
+    &::after {
+      bottom: -50%;
+      transition: bottom cubic-bezier( 0.29, 0.14, 0.54, -0.35 ) 0.8s 0.2s;
+    }
+  }
 }
 
 .overlay {
@@ -64,6 +114,7 @@
   justify-content: center;
   align-items: center;
   font-size: 3em;
+  z-index: 80;
 
   p {
     margin: 12%;

@@ -1,4 +1,4 @@
-<div id="game-selector-container">
+<div id="game-selector-container" [ngClass]="{'visible': canLaunchGame}">
   <h2>Sélection du jeu</h2>
 
   <form [formGroup]="mainForm" (ngSubmit)="onSubmitGameForm()">
@@ -28,6 +28,6 @@
   </form>
 </div>
 
-<div class="overlay" *ngIf="!canLaunchGame">
+<div class="overlay" *ngIf="false && !canLaunchGame">
   <p>Sélectionner au moins un joueur</p>
 </div>

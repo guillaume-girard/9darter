@@ -1,3 +1,5 @@
+@use '../../../variables';
+
 #input-player-container {
   display: flex;
   flex-direction: column;
@@ -20,7 +22,7 @@
 
     button {
       padding: 10px;
-      background-color: green;
+      background-color: variables.$button_color;
       color: whitesmoke;
       outline: none;
       font-size: 2em;

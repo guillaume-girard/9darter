@@ -69,6 +69,22 @@ export class PlayerService {
     }
   }
 
+  public setDebugPlayers(nbPlayers: number): void {
+    let limit = nbPlayers;
+    if (nbPlayers > this.availablePlayers.length) {
+      let limit = this.availablePlayers.length;
+      console.warn("Pas assez de joueurs disponibles, seulement " + limit + " ajoutés")
+    }
+    let players: Player[] = [];
+    for(let i = 0; i < limit; i++) {
+      let pl: Player|undefined = this.availablePlayers.shift();
+      if (pl) {
+        players.push(pl);
+      }
+    }
+    this.setSelectedPlayers(players);
+  }
+
   public setSelectedPlayers(players: Player[]) {
     this.selectedPlayers = players;
     this.$selectedPlayers.next(this.selectedPlayers);

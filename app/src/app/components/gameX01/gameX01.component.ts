@@ -41,6 +41,8 @@ export class GameX01Component implements OnInit {
   
   get gameTitle(): string {
     let str = this.gameOptions.gameType;
+    if (this.gameOptions.isDoubleIn)
+      str += " Double In";
     if (this.gameOptions.isDoubleOut)
       str += " Double Out";
     if (this.gameOptions.nbLegsToWin > 1)

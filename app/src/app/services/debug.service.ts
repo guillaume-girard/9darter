@@ -12,12 +12,13 @@ export class DebugService {
   constructor(private playerService: PlayerService) {}
 
   loadState(appComponent: AppComponent): void {
-    // Load des joueurs fictifs
+    // Load des joueurs
     const nbPlayersToLoad = environment.loadNbPlayers;
+    this.playerService.setDebugPlayers(nbPlayersToLoad);
 
-    for (let i = 0; i < nbPlayersToLoad; i++) {
-      this.playerService.addAvailablePlayer(faker.person.firstName());
-    }
+    // for (let i = 0; i < nbPlayersToLoad; i++) {
+    //   this.playerService.addAvailablePlayer(faker.person.firstName());
+    // }
 
     if (environment.loadGame) {
       // Load du jeu fictif

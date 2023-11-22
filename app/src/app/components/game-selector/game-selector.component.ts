@@ -12,9 +12,11 @@ export class GameSelectorComponent {
   @Input() canLaunchGame: boolean = false;
   mainForm: FormGroup;
   gameMode: FormControl;
+  isDoubleIn: FormControl;
   isDoubleOut: FormControl;
   isReverseCricket: FormControl;
   isCrazyCricket: FormControl;
+  isWildCricket: FormControl;
   nbLegsToWin: FormControl;
 
   showOptionsCtrl$: Observable<boolean>;
@@ -24,9 +26,11 @@ export class GameSelectorComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.gameMode = this.formBuilder.control('', Validators.required);
+    this.isDoubleIn = this.formBuilder.control(false);
     this.isDoubleOut = this.formBuilder.control(false);
     this.isReverseCricket = this.formBuilder.control(false);
     this.isCrazyCricket = this.formBuilder.control(false);
+    this.isWildCricket = this.formBuilder.control(false);
     this.nbLegsToWin = this.formBuilder.control(1);
 
     this.showOptionsCtrl$ = this.gameMode.valueChanges.pipe(
@@ -58,9 +62,11 @@ export class GameSelectorComponent {
 
     this.mainForm = this.formBuilder.group({
       gameMode: this.gameMode,
+      isDoubleIn: this.isDoubleIn,
       isDoubleOut: this.isDoubleOut,
       isReverseCricket: this.isReverseCricket,
       isCrazyCricket: this.isCrazyCricket,
+      isWildCricket: this.isWildCricket,
       nbLegsToWin: this.nbLegsToWin
     });
   }

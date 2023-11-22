@@ -1,33 +1,69 @@
 <div id="game-selector-container" [ngClass]="{'visible': canLaunchGame}">
-  <h2>Sélection du jeu</h2>
-
   <form [formGroup]="mainForm" (ngSubmit)="onSubmitGameForm()">
-    <div class="radio-games">
-      <input id="radio-game301" type="radio" value="301" [formControl]="gameMode" /><label for="radio-game301">301</label>
-      <input id="radio-game501" type="radio" value="501" [formControl]="gameMode" /><label for="radio-game501">501</label>
-      <input id="radio-gameCricket" type="radio" value="cricket" [formControl]="gameMode" /><label for="radio-gameCricket">Cricket</label>
+  
+    <header>
+      <h2>Sélection du jeu</h2>
+    </header>
+
+    <div class="game-type">
+      <h3>Type de jeu</h3>
+      <div class="radio-games">
+        <input id="radio-game301" type="radio" value="301" [formControl]="gameMode" /><label for="radio-game301">301</label>
+        <input id="radio-game501" type="radio" value="501" [formControl]="gameMode" /><label for="radio-game501">501</label>
+        <input id="radio-gameCricket" type="radio" value="cricket" [formControl]="gameMode" /><label for="radio-gameCricket">Cricket</label>
+      </div>
     </div>
 
     <div class="game-options" *ngIf="showOptionsCtrl$ | async">
+      <h3>Options du jeu</h3>
       <div class="game-301-options" *ngIf="show301OptionsCtrl">
-        Double-out <input type="checkbox" [formControl]="isDoubleOut" />
-        Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
+        <!--<input id="chk-opt301-doublein" type="checkbox" [formControl]="isDoubleIn" [disabled]="true" />
+        <label for="chk-opt301-doublein" title="Option disponible prochainement" >Double in</label>-->
+
+        <input id="chk-opt301-doubleout" type="checkbox" [formControl]="isDoubleOut" />
+        <label for="chk-opt301-doubleout">Double out</label>
+        
+        <!--Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />-->
       </div>
       <div class="game-501-options" *ngIf="show501OptionsCtrl">
-        Double-out <input type="checkbox" [formControl]="isDoubleOut" />
-        Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
+        <!--<input id="chk-opt501-doublein" type="checkbox" [formControl]="isDoubleIn" [disabled]="true" />
+        <label for="chk-opt501-doublein"  title="Option disponible prochainement">Double in</label>-->
+
+        <input id="chk-opt501-doubleout" type="checkbox" [formControl]="isDoubleOut" />
+        <label for="chk-opt501-doubleout">Double out</label>
+
+        <!--Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />-->
       </div>
       <div class="game-cricket-options" *ngIf="showCricketOptionsCtrl">
-        Reverse <input type="checkbox" [formControl]="isReverseCricket" />
-        Crazy <input type="checkbox" [formControl]="isCrazyCricket" />
-        Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />
+        <input id="chk-optcricket-reverse" type="checkbox" [formControl]="isReverseCricket" />
+        <label for="chk-optcricket-reverse">Reverse</label>
+
+        <input id="chk-optcricket-crazy" type="checkbox" [formControl]="isCrazyCricket" />
+        <label for="chk-optcricket-crazy">Crazy</label>
+
+        <!--<input id="chk-optcricket-wild" type="checkbox" [formControl]="isWildCricket" [disabled]="true" />
+       <label for="chk-optcricket-wild" title="Option disponible prochainement" >Wild & Crazy</label> -->
+
+        <!--Nombre de legs pour gagner <input type="number" min="1" max="9" step="1" [formControl]="nbLegsToWin" />-->
       </div>
     </div>
 
-    <button type="submit" [disabled]="!mainForm.valid">Lancer le jeu</button>
+    <footer>
+      <div class="rules-wrapper">
+        <b>Règles du jeu :</b>
+        <p *ngIf="!mainForm.valid">Sélectionner un jeu pour voir les règles</p>
+        <p *ngIf="mainForm.valid">J'ai pas écrit les règles encore, désolé. Bisous.</p>
+      </div>
+      <div class="button-wrapper">
+        <button type="submit" [disabled]="!mainForm.valid">Lancer le jeu</button>
+      </div>
+    </footer>
   </form>
 </div>
+
+<!-- Overlay remplacé par les portes de garage
 
 <div class="overlay" *ngIf="false && !canLaunchGame">
   <p>Sélectionner au moins un joueur</p>
 </div>
+-->

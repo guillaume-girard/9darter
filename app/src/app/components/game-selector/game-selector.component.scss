@@ -8,6 +8,12 @@
   padding: 20px;
   padding-left: variables.$game_launcher_internal_radius * 2;
 
+  form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   h2 {
     text-align: center;
   }
@@ -41,15 +47,97 @@
       border-style: solid;
 
       &:hover {
-        border-color: rgb(185, 22, 60);
+        border-color: variables.$game_button_border_color;
       }
     }
   }
 
   .game-options {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
+
+    div {
+      display: flex;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      display: none;
+
+      &:checked + label {
+        opacity: 1;
+        border-color: variables.$game_option_button_background_color;
+        box-shadow: 0px 0px 10px 8px white;
+      }
+
+      & + label {
+        cursor: pointer;
+        padding: 20px;
+        margin-right: 15px;
+        border-radius: 8px;
+        font-size: 2em;
+        background-color: variables.$game_option_button_background_color;
+        color: whitesmoke;
+        opacity: .6;
+        transition: box-shadow ease-out 0.2s;
+        border-width: 3px;
+        border-color: transparent;
+        border-style: solid;
+  
+        &:hover {
+          border-color: variables.$game_option_button_border_color;
+        }
+      }
+    }
   }
 
+  footer {
+    display: flex;
+    margin-top: auto;
+    height: 250px;
+
+    .rules-wrapper {
+      flex: 1;
+      color: variables.$rules_text_color;
+      background-color: variables.$rules_background_color;
+      padding: 1em;
+      overflow: auto;
+    }
+
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-basis: min-content;
+
+      button {
+        padding: 10px;
+        background-color: variables.$button_color;
+        color: whitesmoke;
+        outline: none;
+        font-size: 2em;
+        border: none;
+        cursor: pointer;
+        margin-left: 5px;
+        max-width: 6em;
+        min-width: 4em;
+  
+        &:hover {
+          border: 2px solid rgb(30, 100, 30);
+        }
+
+        &:disabled {
+          background-color: variables.$disabled_button_color;
+          border: none;
+          opacity: .6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  /* Portes de garage */
   &::before, &::after {
     content: "";
     position: absolute;
@@ -101,6 +189,9 @@
   }
 }
 
+/* Overlay remplacé par les portes de garage
+@TODO: le réutiliser pour afficher "Selectionner au moins un joueur" ?
+
 .overlay {
   position: absolute;
   top: 0;
@@ -121,3 +212,4 @@
     text-align: center;
   }
 }
+*/

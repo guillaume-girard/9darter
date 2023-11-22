@@ -37,6 +37,8 @@ export class AppComponent {
   ) {}
   
   ngOnInit(): void {
+    // @TODO le playerService devrait sans doute être injecté dans le composant game-selector 
+    // directement (utile seulement pour la variable canLaunchGame)
     this.playerService.$nbPlayersChange.subscribe((value) => this.canLaunchGame = value > 0);
 
     if (environment.loadDebug) {

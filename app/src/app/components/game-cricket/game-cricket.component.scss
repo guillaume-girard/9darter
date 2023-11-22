@@ -1,6 +1,8 @@
 /* Cricket */
 #scoreprint {
   font-size: 2em;
+  overflow: auto;
+  max-width: 100%;
 
   table thead th {
     padding: 10px 20px 0;

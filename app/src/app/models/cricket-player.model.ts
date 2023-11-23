@@ -2,19 +2,21 @@ import { Player, PlayerInGame } from "./player.model";
 
 export class CricketPlayer implements PlayerInGame {
   name: string;
-  score: number;
-  finished: boolean;
-  legs: number;
-  rank: null | number;
   targetsState: { target: string, state: number }[];
+  score: number;
+  nbDartsThrown: number;
+  legs: number;
+  finished: boolean;
+  rank: null | number;
 
   constructor(player: Player, targets: string[]) {
     this.name = player.name;
-    this.score = 0;
     this.targetsState = [];
     this.setInitialTargetsState(targets);
-    this.finished = false;
+    this.score = 0;
+    this.nbDartsThrown = 0;
     this.legs = 0;
+    this.finished = false;
     this.rank = null;
   }
 
@@ -24,11 +26,12 @@ export class CricketPlayer implements PlayerInGame {
   }
 
   reInitPlayer(targets: string[]): void {
-    this.score = 0;
     this.targetsState = [];
     this.setInitialTargetsState(targets);
-    this.finished = false;
+    this.score = 0;
+    this.nbDartsThrown = 0;
     this.legs = 0;
+    this.finished = false;
     this.rank = null;
   }
 

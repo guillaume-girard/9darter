@@ -21,3 +21,9 @@ $game_option_button_border_color: #f5940c;
 
 $rules_background_color: #111;
 $rules_text_color: whitesmoke;
+
+$X01_background_color_start: $game_laucher_backgroundcolor_start;
+$X01_background_color_end: $game_laucher_backgroundcolor;
+$X01_current_player_background_start: #5472d4;
+$X01_current_player_background_end: #b1c0f1;
+$X01_score_text_color: $game_button_border_color;

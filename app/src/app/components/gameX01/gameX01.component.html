@@ -4,19 +4,31 @@
 
   <div *ngFor="let player of computer.players" [ngClass]="{'current': player === computer.currentPlayer, 'finished': player.finished}" class="scoreline">
     <h2>{{ player.name }}</h2>
-    <span *ngIf="player.suggestion" class='suggestion'>{{ player.suggestionComputed }}</span>
+    <span [ngClass]="{suggestion: player.suggestion}">{{ player.suggestionComputed }}</span>
     <span class='score'>{{ player.rank !== null ? player.rankComputed : player.score }}</span>
-    <div class='average'>Average : <span>{{ player.average }}</span></div>
+    <span>{{ player.average }}</span>
   </div>
+</div>
 
-  <div *ngIf="computer.isGameFinished">
+<div *ngIf="computer.isGameFinished" class="revenge-wrapper">
+  <div class="button-wrapper">
     <button (click)="launchRevenge()">Faire la revenche</button>
-    <ul>
-      <li>Perdant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="LOSER_FIRST" /></li>
-      <li>Gagnant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="WINNER_FIRST" /></li>
-      <li>Ordre aléatoire <input name="revenge-type" type="radio" [formControl]="revengeType" value="RANDOM" /></li>
-      <li>Même ordre <input name="revenge-type" type="radio" [formControl]="revengeType" value="SAME_ORDER" /></li>
-    </ul>
-    Garder les averages <input type="checkbox" [formControl]="keepAverage" />
   </div>
+  <ul>
+    <li>
+      <input id="rad-loser-first" name="revenge-type" type="radio" [formControl]="revengeType" value="LOSER_FIRST" />
+      <label for="rad-loser-first">Perdant en premier</label>
+    </li>
+    <li>
+      <input id="rad-winner-first" name="revenge-type" type="radio" [formControl]="revengeType" value="WINNER_FIRST" />
+      <label for="rad-winner-first">Gagnant en premier</label>
+    <li>
+      <input id="rad-random" name="revenge-type" type="radio" [formControl]="revengeType" value="RANDOM" />
+      <label for="rad-random">Ordre aléatoire</label>
+    </li>
+    <li>
+      <input id="rad-same-order" name="revenge-type" type="radio" [formControl]="revengeType" value="SAME_ORDER" />
+      <label for="rad-same-order">Même ordre</label>
+    </li>
+  </ul>
 </div>

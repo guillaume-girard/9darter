@@ -61,7 +61,7 @@ export class GameX01Computer extends GameComputer {
 
     valueNumber *= multiplyBy;
 
-    this.currentPlayer.nbDarts++;
+    this.currentPlayer.nbDartsThrown++;
     this.currentPlayer.totalpoints += valueNumber;
     this.currentPlayer.score -= valueNumber;
     this.currentPlayer.suggestion = this.findSuggestedFinish(this.currentPlayer.score, this.nbDartsLeftToCurrentPlayer);
@@ -182,6 +182,7 @@ export class GameX01Computer extends GameComputer {
     })
   }
 
+  // @TODO déplacer la fonction dans X01Player
   findSuggestedFinish(score: number, nbDartsLeft: number) {
     if (score > 170 || nbDartsLeft <= 0) {
       return false;

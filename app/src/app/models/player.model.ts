@@ -5,8 +5,9 @@ export interface Player {
 
 export interface PlayerInGame {
   name: string;
-  finished: boolean;
+  nbDartsThrown: number;
   legs: number;
+  finished: boolean;
   rank: null | number;
 
   reInitPlayer(...args: any): void;

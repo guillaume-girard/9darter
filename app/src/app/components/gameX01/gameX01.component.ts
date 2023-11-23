@@ -30,7 +30,7 @@ export class GameX01Component implements OnInit {
   ngOnInit(): void {
     this.computer.initGame(this.gameOptions.gameType, this.gameOptions.isDoubleOut, this.gameOptions.nbLegsToWin);
 
-    if (environment.loadGameState === LOAD_GAME_STATE.FINISH) {
+    if (environment.loadDebug && environment.loadGameState === LOAD_GAME_STATE.FINISH) {
       this.computer.finishGame();
     }
   }

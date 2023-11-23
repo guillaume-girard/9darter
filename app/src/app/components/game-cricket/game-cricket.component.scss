@@ -1,3 +1,5 @@
+@use "../../../variables";
+
 /* Cricket */
 #scoreprint {
   font-size: 2em;
@@ -62,5 +64,102 @@
   tfoot {
     background-color: gray;
     color: whitesmoke;
+  }
+}
+
+.revenge-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 2em;
+
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: min-content;
+
+    button {
+      height: 100%;
+      padding: 20px;
+      background-color: variables.$button_color;
+      color: whitesmoke;
+      outline: none;
+      font-size: 2em;
+      border: none;
+      cursor: pointer;
+      margin-left: 5px;
+      max-width: 6em;
+      min-width: 4em;
+      border: 2px solid transparent;
+
+      &:hover {
+        border-color: rgb(30, 100, 30);
+      }
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style-type: none;
+    }
+
+    input {
+      display: none;
+
+      & + label {
+        cursor: pointer;
+        padding: 10px 40px 10px 20px;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        border: 2px solid transparent;
+        
+        &:hover {
+          border-color: lightgreen;
+        }
+      }
+      
+      &:checked + label {
+        background-color: lightgreen;
+        
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 7.5px 0 7.5px 10px;
+          border-color: transparent transparent transparent darkgreen;
+        }
+      }
+    }
+  }
+
+  .option-wrapper {
+    margin-left: 10px;
+    background-color: lightgray;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    p {
+      font-weight: bold;
+      text-align: center;
+      padding-bottom: .5em;
+      border-bottom: 1px dashed black
+    }
+
+    input, label {
+      cursor: pointer;
+    }
   }
 }

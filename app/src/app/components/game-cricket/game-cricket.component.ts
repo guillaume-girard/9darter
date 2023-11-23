@@ -29,7 +29,7 @@ export class GameCricketComponent implements OnInit {
     this.computer.initGame(this.gameOptions.isReverse, this.gameOptions.isCrazy, this.gameOptions.nbLegsToWin);
 
     // Only for development 
-    if (environment.loadGameState === LOAD_GAME_STATE.FINISH) {
+    if (environment.loadDebug && environment.loadGameState === LOAD_GAME_STATE.FINISH) {
       this.computer.finishGame();
     }
   }

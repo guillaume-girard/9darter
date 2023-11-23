@@ -6,7 +6,7 @@ export class X01Player implements PlayerInGame {
   score: number;
   average: number;
   nbVolleys: number;
-  nbDarts: number; // utilisé pour le cigare
+  nbDartsThrown: number; // utilisé pour le cigare
   totalpoints: number;
   finished: boolean;
   legs: number;
@@ -17,7 +17,7 @@ export class X01Player implements PlayerInGame {
     this.score = startScore;
     this.average = 0;
     this.nbVolleys = 0;
-    this.nbDarts = 0;
+    this.nbDartsThrown = 0;
     this.suggestion = false;
     this.totalpoints = 0;
     this.finished = false;
@@ -78,7 +78,7 @@ export class X01Player implements PlayerInGame {
       this.nbVolleys = 0;
       this.totalpoints = 0;
     }
-    this.nbDarts = 0;
+    this.nbDartsThrown = 0;
     this.suggestion = false;
     this.finished = false;
     this.rank = null;

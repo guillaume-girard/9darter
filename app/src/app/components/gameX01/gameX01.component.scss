@@ -1,20 +1,31 @@
+@use "../../../variables";
+
 #scoreprint {
   padding: 10px;
   font-size: 30px;
   height: 400px;
-  background-image: linear-gradient(#e0e0de, white);
+  background-image: linear-gradient(
+      variables.$X01_background_color_start 0%, 
+      variables.$X01_background_color_end 60%, 
+      variables.$X01_background_color_end 100%
+  );
 }
 
 #scoreprint h2 {
-  margin: 0;
-  width: 20%;
+  margin: 0 2em 0 0;
   font-weight: normal;
   display: inline-block;
   position: relative;
+  flex: 1;
 }
 
 #scoreprint .current:not(.finished) {
-  background-color: rgb(180, 180, 180);
+  // background-color: variables.$X01_current_player_background;
+  background-image: linear-gradient(
+      variables.$X01_current_player_background_start, 
+      variables.$X01_current_player_background_end
+  );
+  border-radius: 10px;
 
   h2 {
     font-weight: bold;
@@ -36,13 +47,15 @@
   }
 }
 
+// @TODO styles en mode CSS --> SASS
 #scoreprint span {
   font-weight: bold;
-  flex: 1;
+  width: 8rem;
+  text-align: right;
 }
 
 #scoreprint div.scoreline span.score {
-  color: red;
+  color: variables.$X01_score_text_color;
 }
 
 #scoreprint div.scoreline span.suggestion {
@@ -65,16 +78,15 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  padding-right: 1em;
 }
 
 #scoreprint div.scoreline.finished {
   opacity: .5;
 }
 
-#scoreprint div.average {
-  width: 20%;
-}
-
+/* Styles pour le cigare 
+@TODO faire le cigare */
 #scoreprint div.cigare {
   height: 100%;
   flex: 2;
@@ -95,4 +107,102 @@
 
 #scoreprint div.cigare div span.fill {
   background-color: red;
+}
+
+/* @TODO externaliser le composant de revanche */
+.revenge-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 2em;
+
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: min-content;
+
+    button {
+      height: 100%;
+      padding: 20px;
+      background-color: variables.$button_color;
+      color: whitesmoke;
+      outline: none;
+      font-size: 2em;
+      border: none;
+      cursor: pointer;
+      margin-left: 5px;
+      max-width: 6em;
+      min-width: 4em;
+      border: 2px solid transparent;
+
+      &:hover {
+        border-color: rgb(30, 100, 30);
+      }
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style-type: none;
+    }
+
+    input {
+      display: none;
+
+      & + label {
+        cursor: pointer;
+        padding: 10px 40px 10px 20px;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        border: 2px solid transparent;
+        
+        &:hover {
+          border-color: lightgreen;
+        }
+      }
+      
+      &:checked + label {
+        background-color: lightgreen;
+        
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 7.5px 0 7.5px 10px;
+          border-color: transparent transparent transparent darkgreen;
+        }
+      }
+    }
+  }
+
+  .option-wrapper {
+    margin-left: 10px;
+    background-color: lightgray;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    p {
+      font-weight: bold;
+      text-align: center;
+      padding-bottom: .5em;
+      border-bottom: 1px dashed black
+    }
+
+    input, label {
+      cursor: pointer;
+    }
+  }
 }

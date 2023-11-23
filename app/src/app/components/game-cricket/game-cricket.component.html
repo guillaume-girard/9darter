@@ -25,15 +25,28 @@
       </tr>
     </tfoot>
   </table>
-
-  <div *ngIf="computer.isGameFinished">
-    <button (click)="launchRevenge()">Faire la revenche</button>
-    <ul>
-      <li>Perdant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="LOSER_FIRST" /></li>
-      <li>Gagnant en premier <input name="revenge-type" type="radio" [formControl]="revengeType" value="WINNER_FIRST" /></li>
-      <li>Ordre aléatoire <input name="revenge-type" type="radio" [formControl]="revengeType" value="RANDOM" /></li>
-      <li>Même ordre <input name="revenge-type" type="radio" [formControl]="revengeType" value="SAME_ORDER" /></li>
-    </ul>
-  </div>
   
+</div>
+
+<div *ngIf="computer.isGameFinished" class="revenge-wrapper">
+  <div class="button-wrapper">
+    <button (click)="launchRevenge()">Faire la revenche</button>
+  </div>
+  <ul>
+    <li>
+      <input id="rad-loser-first" name="revenge-type" type="radio" [formControl]="revengeType" value="LOSER_FIRST" />
+      <label for="rad-loser-first">Perdant en premier</label>
+    </li>
+    <li>
+      <input id="rad-winner-first" name="revenge-type" type="radio" [formControl]="revengeType" value="WINNER_FIRST" />
+      <label for="rad-winner-first">Gagnant en premier</label>
+    <li>
+      <input id="rad-random" name="revenge-type" type="radio" [formControl]="revengeType" value="RANDOM" />
+      <label for="rad-random">Ordre aléatoire</label>
+    </li>
+    <li>
+      <input id="rad-same-order" name="revenge-type" type="radio" [formControl]="revengeType" value="SAME_ORDER" />
+      <label for="rad-same-order">Même ordre</label>
+    </li>
+  </ul>
 </div>

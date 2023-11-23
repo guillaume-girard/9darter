@@ -10,6 +10,8 @@
   </div>
 </div>
 
+<app-input-target *ngIf="!computer.isGameFinished"></app-input-target>
+
 <div *ngIf="computer.isGameFinished" class="revenge-wrapper">
   <div class="button-wrapper">
     <button (click)="launchRevenge()">Faire la revenche</button>
@@ -31,4 +33,11 @@
       <label for="rad-same-order">Même ordre</label>
     </li>
   </ul>
+  <div class="option-wrapper">
+    <p>Options</p>
+    <div>
+      <label for="chk-keep-average">Garder les averages</label>
+      <input id="chk-keep-average" type="checkbox" [formControl]="keepAverage" />
+    </div>
+  </div>
 </div>

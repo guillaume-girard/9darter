@@ -2,6 +2,7 @@
 
 #scoreprint {
   padding: 10px;
+  margin-bottom: 15px;
   font-size: 30px;
   height: 400px;
   background-image: linear-gradient(
@@ -114,7 +115,6 @@
   display: flex;
   width: 100%;
   justify-content: center;
-  margin-bottom: 2em;
 
   .button-wrapper {
     display: flex;

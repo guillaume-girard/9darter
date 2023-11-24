@@ -48,11 +48,10 @@
       </div>
     </div>
 
-    <footer>
+    <footer *ngIf="mainForm.valid">
       <div class="rules-wrapper">
         <b>Règles du jeu :</b>
-        <p *ngIf="!mainForm.valid">Sélectionner un jeu pour voir les règles</p>
-        <p *ngIf="mainForm.valid">J'ai pas écrit les règles encore, désolé. Bisous.</p>
+        <p>J'ai pas écrit les règles encore, désolé. Bisous.</p>
       </div>
       <div class="button-wrapper">
         <button type="submit" [disabled]="!mainForm.valid">Lancer le jeu</button>

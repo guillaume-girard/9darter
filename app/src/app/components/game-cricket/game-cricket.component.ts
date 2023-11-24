@@ -14,6 +14,7 @@ import { LOAD_GAME_STATE, environment } from 'src/environments/environment.devel
 export class GameCricketComponent implements OnInit {
   computer: GameCricketComputer;
   revengeType: FormControl;
+  keepTargets: FormControl;
   @Input() gameOptions!: GameCricketOptions;
 
   constructor(
@@ -23,6 +24,7 @@ export class GameCricketComponent implements OnInit {
   ) {
     this.computer = new GameCricketComputer(playerService, inputTargetService);
     this.revengeType = this.formBuilder.control('LOSER_FIRST');
+    this.keepTargets = this.formBuilder.control(false);
   }
 
   ngOnInit(): void {
@@ -51,6 +53,6 @@ export class GameCricketComponent implements OnInit {
   }
 
   launchRevenge() {
-    this.computer.reInitGame(this.revengeType.value);
+    this.computer.reInitGame(this.revengeType.value, this.keepTargets.value);
   }
 }

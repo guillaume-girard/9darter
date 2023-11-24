@@ -51,4 +51,11 @@
       <label for="rad-same-order">Même ordre</label>
     </li>
   </ul>
+  <div class="option-wrapper" *ngIf="gameOptions.isCrazy">
+    <p>Options</p>
+    <div>
+      <label for="chk-keep-targets">Garder les mêmes cibles</label>
+      <input id="chk-keep-targets" type="checkbox" [formControl]="keepTargets" />
+    </div>
+  </div>
 </div>

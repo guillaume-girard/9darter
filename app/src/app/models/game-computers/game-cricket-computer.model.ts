@@ -40,9 +40,10 @@ export class GameCricketComputer extends GameComputer {
     this.nbDartsLeftToCurrentPlayer = 3;
   }
 
-  reInitGame(playerOrder: 'LOSER_FIRST' | 'WINNER_FIRST' | 'RANDOM' | 'SAME_ORDER'): void {
+  reInitGame(playerOrder: 'LOSER_FIRST' | 'WINNER_FIRST' | 'RANDOM' | 'SAME_ORDER', keepTargets: boolean = false): void {
     this.setPlayersOrder(playerOrder);
-    this.targets = this.getCricketTargets(this.isCrazy);
+    if(this.isCrazy && !keepTargets)
+      this.targets = this.getCricketTargets(true);
     this.players.forEach((player) => player.reInitPlayer(this.targets));
     this.targetsClosed = [];
     this.currentIndex = 0;

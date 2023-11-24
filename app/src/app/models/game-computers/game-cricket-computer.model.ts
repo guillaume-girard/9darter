@@ -10,6 +10,7 @@ export class GameCricketComputer extends GameComputer {
   currentPlayer!: CricketPlayer;
   nbDartsLeftToCurrentPlayer!: number;
   isReverse: boolean = false;
+  isCrazy: boolean = false;
   targets: string[];
   targetsClosed: string[];
   scoreHtml: string;
@@ -31,6 +32,7 @@ export class GameCricketComputer extends GameComputer {
   initGame(reverse: boolean, crazy: boolean, nbLegsToWin: number) {
     this.nbLegsToWin = nbLegsToWin;
     this.isReverse = reverse;
+    this.isCrazy = crazy;
     this.targets = this.getCricketTargets(crazy);
     this.players = this.playerService.getPlayersForCricketGame(this.targets);
     this.currentIndex = 0;
@@ -40,6 +42,7 @@ export class GameCricketComputer extends GameComputer {
 
   reInitGame(playerOrder: 'LOSER_FIRST' | 'WINNER_FIRST' | 'RANDOM' | 'SAME_ORDER'): void {
     this.setPlayersOrder(playerOrder);
+    this.targets = this.getCricketTargets(this.isCrazy);
     this.players.forEach((player) => player.reInitPlayer(this.targets));
     this.targetsClosed = [];
     this.currentIndex = 0;

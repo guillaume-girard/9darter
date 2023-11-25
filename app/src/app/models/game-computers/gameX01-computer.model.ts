@@ -265,12 +265,12 @@ export class GameX01Computer extends GameComputer {
   
   restoreSnapshot(): void {
     if (this.snapshots.length > 0) {
-      const snapshot = this.snapshots.pop();
+      let snapshot = this.snapshots.pop();
 
       this.players = snapshot.players;
       // Set du prototype pour que les méthodes de X01Player soient utilisables
       // @TODO y'a sans doute mieux à faire... 
-      const proto = Object.getPrototypeOf(new X01Player({ id:0, name: "" }, 0));
+      let proto = Object.getPrototypeOf(new X01Player({ id:0, name: "" }, 0));
       this.players.forEach((el) => Object.setPrototypeOf(el, proto));
 
       this.currentRank = snapshot.currentRank;

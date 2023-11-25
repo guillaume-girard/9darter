@@ -5,7 +5,6 @@ import { CricketPlayer } from "../cricket-player.model";
 import { grosvangerwen } from "src/app/app.component";
 
 export class GameCricketComputer extends GameComputer {
-  gameType!: string;
   players!: CricketPlayer[];
   currentPlayer!: CricketPlayer;
   nbDartsLeftToCurrentPlayer!: number;
@@ -13,7 +12,6 @@ export class GameCricketComputer extends GameComputer {
   isCrazy: boolean = false;
   targets: string[];
   targetsClosed: string[];
-  scoreHtml: string;
 
   constructor(
     override playerService: PlayerService,
@@ -22,7 +20,6 @@ export class GameCricketComputer extends GameComputer {
     super(playerService, inputTargetService);
     this.targets = [];
     this.targetsClosed = [];
-    this.scoreHtml = "";
   }
 
   private get nbPlayers() {
@@ -47,12 +44,13 @@ export class GameCricketComputer extends GameComputer {
     this.players.forEach((player) => player.reInitPlayer(this.targets));
     this.targetsClosed = [];
     this.currentIndex = 0;
+    this.currentRank = 1;
     this.currentPlayer = this.players[0];
     this.nbDartsLeftToCurrentPlayer = 3;
     this.isGameFinished = false;
   }
 
-  protected override addDart(value: string): void {
+  addDart(value: string): void {
     this.nbDartsLeftToCurrentPlayer--;
 
     let firstChar = (value.slice(0, 1)).toLowerCase();
@@ -134,9 +132,9 @@ export class GameCricketComputer extends GameComputer {
           default:
             if (this.targetsClosed.indexOf(target) < 0) {
               let needToClose = true;
-              for (var playerIndex = 0; playerIndex < this.nbPlayers; playerIndex++) {
+              for (let playerIndex = 0; playerIndex < this.nbPlayers; playerIndex++) {
                 if (this.players[playerIndex] !== this.currentPlayer) {
-                  var statteteet = this.players[playerIndex].targetsState.find((el) => el.target === target);
+                  let statteteet = this.players[playerIndex].targetsState.find((el) => el.target === target);
                   if (statteteet && statteteet.state !== 3) {
                     needToClose = false;
                   }
@@ -166,7 +164,7 @@ export class GameCricketComputer extends GameComputer {
     } while (i < multiple);
   }
 
-  override finishGame(): void {
+  finishGame(): void {
     this.isGameFinished = true;
     this.players.forEach((player) => {
       if (player.rank === null) {
@@ -180,7 +178,7 @@ export class GameCricketComputer extends GameComputer {
     let arrNumber: number[] = [];
     if (crazy) {
       do {
-        var nb = Math.floor(Math.random() * 20) + 1;
+        let nb = Math.floor(Math.random() * 20) + 1;
         if (arrNumber.indexOf(nb) < 0) {
           arrNumber.push(nb);
         }
@@ -197,7 +195,7 @@ export class GameCricketComputer extends GameComputer {
     return arr;
   }
 
-  protected override createSnapshot(): void {
+  createSnapshot(): void {
     let snapshot = {
       "players": structuredClone(this.players),
       "currentRank": this.currentRank,
@@ -209,14 +207,15 @@ export class GameCricketComputer extends GameComputer {
 
     this.snapshots.push(snapshot);
   }
-  protected override restoreSnapshot(): void {
+
+  restoreSnapshot(): void {
     if (this.snapshots.length > 0) {
-      var snapshot = this.snapshots.pop();
+      let snapshot = this.snapshots.pop();
 
       this.players = snapshot.players;
       // Set du prototype pour que les méthodes de CricketPlayer soient utilisables
       // @TODO y'a sans doute mieux à faire... 
-      const proto = Object.getPrototypeOf(new CricketPlayer({ id: 0, name: "" }, []));
+      let proto = Object.getPrototypeOf(new CricketPlayer({ id: 0, name: "" }, []));
       this.players.forEach((el) => Object.setPrototypeOf(el, proto));
 
       this.currentRank = snapshot.currentRank;
